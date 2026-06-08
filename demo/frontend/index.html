@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mold Capacity Analysis — Phase 1 Demo</title>
+<style>
+  :root {
+    --primary: #2563eb; --primary-light: #dbeafe; --primary-dark: #1d4ed8;
+    --success: #16a34a; --success-light: #dcfce7;
+    --warning: #f59e0b; --warning-light: #fef3c7;
+    --danger: #dc2626; --danger-light: #fee2e2;
+    --info: #0ea5e9; --info-light: #e0f2fe;
+    --bg: #f3f4f6; --card: #ffffff;
+    --text: #1f2937; --text-muted: #6b7280;
+    --border: #e5e7eb; --radius: 10px; --shadow: 0 1px 3px rgba(0,0,0,0.08);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; padding-bottom: 60px; }
+
+  /* Header */
+  .header { background: linear-gradient(135deg, #1e3a5f 0%, #2563eb 100%); color: white; padding: 20px 32px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+  .header-inner { max-width: 1100px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; }
+  .header h1 { font-size: 20px; font-weight: 600; letter-spacing: -0.3px; }
+  .header .subtitle { font-size: 13px; opacity: 0.85; margin-top: 4px; }
+  .header-badge { background: rgba(255,255,255,0.15); padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 500; }
+
+  /* Nav */
+  .nav-bar { background: white; border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100; }
+  .nav-inner { max-width: 1100px; margin: 0 auto; display: flex; }
+  .nav-item { padding: 14px 24px; font-size: 14px; font-weight: 500; color: var(--text-muted); cursor: pointer; border-bottom: 3px solid transparent; transition: all 0.2s; background: none; border-top: none; border-left: none; border-right: none; }
+  .nav-item:hover { color: var(--primary); background: #f9fafb; }
+  .nav-item.active { color: var(--primary); border-bottom-color: var(--primary); background: var(--primary-light); }
+
+  /* Container */
+  .container { max-width: 1100px; margin: 0 auto; padding: 24px 20px; }
+
+  /* Card */
+  .card { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); border: 1px solid var(--border); margin-bottom: 20px; overflow: hidden; }
+  .card-header { padding: 16px 24px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 10px; }
+  .card-header h2 { font-size: 16px; font-weight: 600; }
+  .card-header .icon { font-size: 20px; }
+  .card-body { padding: 24px; }
+  .card-body-nopad { padding: 0; }
+
+  /* Steps */
+  .steps { display: flex; gap: 8px; margin-bottom: 24px; padding: 0 4px; }
+  .step { flex: 1; text-align: center; padding: 12px 6px; border-radius: var(--radius); background: #f9fafb; border: 2px solid transparent; transition: all 0.3s; }
+  .step.active { border-color: var(--primary); background: var(--primary-light); }
+  .step.completed { border-color: var(--success); background: #f0fdf4; }
+  .step-num { width: 26px; height: 26px; border-radius: 50%; background: var(--border); color: var(--text-muted); display: inline-flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600; margin-bottom: 4px; }
+  .step.active .step-num { background: var(--primary); color: white; }
+  .step.completed .step-num { background: var(--success); color: white; }
+  .step-label { font-size: 12px; font-weight: 500; color: var(--text-muted); }
+  .step.active .step-label { color: var(--primary); }
+  .step.completed .step-label { color: var(--success); }
+
+  /* Form */
+  .form-row { display: flex; gap: 16px; margin-bottom: 18px; }
+  .form-group { flex: 1; }
+  .form-group label { display: block; font-size: 13px; font-weight: 500; margin-bottom: 6px; }
+  .form-group label .required { color: var(--danger); margin-left: 2px; }
+  .form-group label .optional { color: var(--text-muted); font-weight: 400; font-size: 12px; }
+  select, input[type="text"] { width: 100%; padding: 9px 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 14px; background: white; transition: border-color 0.2s; }
+  select:focus, input:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(37,99,235,0.1); }
+  .form-hint { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
+
+  /* Upload */
+  .upload-area { border: 2px dashed var(--border); border-radius: var(--radius); padding: 32px 20px; text-align: center; background: #fafafa; transition: all 0.3s; cursor: pointer; position: relative; }
+  .upload-area:hover, .upload-area.dragover { border-color: var(--primary); background: var(--primary-light); }
+  .upload-area .upload-icon { font-size: 36px; margin-bottom: 10px; opacity: 0.6; }
+  .upload-area .upload-text { font-size: 14px; color: var(--text-muted); margin-bottom: 6px; }
+  .upload-area .upload-hint { font-size: 12px; color: #9ca3af; }
+  .upload-area input[type="file"] { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+
+  /* File list */
+  .file-list { margin-top: 14px; }
+  .file-item { display: flex; align-items: center; gap: 12px; padding: 12px 16px; background: #f9fafb; border-radius: 8px; margin-bottom: 8px; border: 1px solid var(--border); }
+  .file-item .file-icon { font-size: 24px; }
+  .file-item .file-info { flex: 1; }
+  .file-item .file-name { font-size: 14px; font-weight: 500; }
+  .file-item .file-meta { font-size: 12px; color: var(--text-muted); }
+  .file-item .file-status { padding: 4px 10px; border-radius: 4px; font-size: 12px; font-weight: 500; }
+  .file-status.pending { background: var(--warning-light); color: #92400e; }
+  .file-status.validating { background: var(--primary-light); color: var(--primary); }
+  .file-status.pass { background: var(--success-light); color: var(--success); }
+  .file-status.fail { background: var(--danger-light); color: var(--danger); }
+  .file-status.optional { background: var(--info-light); color: var(--info); }
+
+  /* Validation result */
+  .validation-result { margin-top: 14px; padding: 14px; border-radius: 8px; display: none; }
+  .validation-result.show { display: block; }
+  .validation-result.pass { background: var(--success-light); border: 1px solid #bbf7d0; }
+  .validation-result.fail { background: var(--danger-light); border: 1px solid #fecaca; }
+  .validation-result .vr-title { font-weight: 600; font-size: 14px; margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
+  .validation-result .vr-detail { font-size: 13px; color: var(--text-muted); line-height: 1.8; }
+
+  /* Buttons */
+  .btn { display: inline-flex; align-items: center; gap: 6px; padding: 9px 18px; border-radius: 8px; font-size: 14px; font-weight: 500; border: none; cursor: pointer; transition: all 0.2s; text-decoration: none; }
+  .btn-primary { background: var(--primary); color: white; }
+  .btn-primary:hover { background: var(--primary-dark); }
+  .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
+  .btn-outline { background: white; color: var(--primary); border: 1px solid var(--primary); }
+  .btn-outline:hover { background: var(--primary-light); }
+  .btn-success { background: var(--success); color: white; }
+  .btn-danger { background: var(--danger); color: white; }
+  .btn-sm { padding: 6px 12px; font-size: 12px; }
+  .btn-group { display: flex; gap: 10px; margin-top: 18px; flex-wrap: wrap; }
+
+  /* Progress */
+  .progress-bar { width: 100%; height: 8px; background: var(--border); border-radius: 4px; overflow: hidden; margin: 14px 0; }
+  .progress-bar-fill { height: 100%; background: linear-gradient(90deg, var(--primary), #60a5fa); border-radius: 4px; transition: width 0.4s ease; width: 0%; }
+
+  /* Result card */
+  .result-card { background: linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 100%); border: 1px solid #bbf7d0; border-radius: var(--radius); padding: 22px; margin-top: 18px; display: none; }
+  .result-card.show { display: block; animation: slideIn 0.4s ease; }
+  @keyframes slideIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+  .result-card .rc-title { font-size: 16px; font-weight: 600; color: var(--success); margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
+  .result-kpis { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 16px; }
+  .result-kpi { background: white; padding: 12px; border-radius: 8px; text-align: center; box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
+  .result-kpi .value { font-size: 22px; font-weight: 700; color: var(--primary); }
+  .result-kpi .label { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+
+  /* Match rate section */
+  .match-section { background: #fffbeb; border: 1px solid #fde68a; border-radius: var(--radius); padding: 18px; margin-top: 14px; }
+  .match-section .ms-title { font-size: 14px; font-weight: 600; color: #92400e; margin-bottom: 10px; display: flex; align-items: center; gap: 6px; }
+  .match-bar-container { display: flex; align-items: center; gap: 12px; margin: 10px 0; }
+  .match-bar-bg { flex: 1; height: 20px; background: #fef3c7; border-radius: 10px; overflow: hidden; }
+  .match-bar-fill { height: 100%; border-radius: 10px; transition: width 1s ease; }
+  .match-bar-fill.high { background: linear-gradient(90deg, var(--success), #4ade80); }
+  .match-bar-fill.medium { background: linear-gradient(90deg, var(--warning), #fbbf24); }
+  .match-bar-fill.low { background: linear-gradient(90deg, var(--danger), #f87171); }
+  .match-bar-text { font-size: 14px; font-weight: 600; min-width: 50px; }
+
+  /* Table */
+  .data-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .data-table th { text-align: left; padding: 11px 14px; background: #f9fafb; font-weight: 600; color: var(--text-muted); border-bottom: 1px solid var(--border); font-size: 12px; text-transform: uppercase; letter-spacing: 0.3px; }
+  .data-table td { padding: 12px 14px; border-bottom: 1px solid var(--border); }
+  .data-table tr:hover { background: #f9fafb; }
+  .tag { display: inline-flex; align-items: center; gap: 4px; padding: 3px 8px; border-radius: 4px; font-size: 12px; font-weight: 500; }
+  .tag-success { background: var(--success-light); color: #166534; }
+  .tag-warning { background: var(--warning-light); color: #92400e; }
+  .tag-danger { background: var(--danger-light); color: #991b1b; }
+  .tag-info { background: var(--info-light); color: #1e40af; }
+
+  /* Section title */
+  .section-title { font-size: 13px; font-weight: 600; color: var(--text-muted); margin: 6px 2px 14px; text-transform: uppercase; letter-spacing: 0.5px; }
+
+  /* Config page */
+  .config-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  .config-card { background: #f9fafb; border: 1px solid var(--border); border-radius: 8px; padding: 16px; transition: all 0.2s; }
+  .config-card:hover { border-color: var(--primary); background: white; }
+  .config-card .cc-icon { font-size: 28px; margin-bottom: 8px; }
+  .config-card .cc-name { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+  .config-card .cc-desc { font-size: 12px; color: var(--text-muted); margin-bottom: 10px; }
+  .config-card .cc-status { display: inline-flex; align-items: center; gap: 4px; font-size: 12px; }
+
+  /* Two column layout */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+
+  /* Info box */
+  .info-box { background: var(--info-light); border: 1px solid #bae6fd; border-radius: 8px; padding: 14px 16px; font-size: 13px; color: #0c4a6e; margin-bottom: 16px; }
+  .info-box strong { color: #075985; }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .form-row, .two-col, .config-grid { grid-template-columns: 1fr; flex-direction: column; }
+    .result-kpis { grid-template-columns: repeat(2, 1fr); }
+    .header-inner { flex-direction: column; align-items: flex-start; gap: 10px; }
+  }
+
+  /* Page visibility */
+  .page { display: none; }
+  .page.active { display: block; }
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<div class="header">
+  <div class="header-inner">
+    <div>
+      <h1>🔧 Mold Capacity Analysis</h1>
+      <div class="subtitle">Phase 1 MVP — 智能产能核算与决策支持</div>
+    </div>
+    <div class="header-badge">Demo v1.1</div>
+  </div>
+</div>
+
+<!-- Navigation -->
+<div class="nav-bar">
+  <div class="nav-inner">
+    <button class="nav-item active" onclick="showPage('task')" id="nav-task">📝 新建计算任务</button>
+    <button class="nav-item" onclick="showPage('config')" id="nav-config">⚙️ 基础数据源配置</button>
+  </div>
+</div>
+
+<div class="container">
+
+<!-- ==================== PAGE 1: 新建计算任务 ==================== -->
+<div class="page active" id="page-task">
+
+  <!-- Steps indicator -->
+  <div class="steps">
+    <div class="step active" id="step1-indicator">
+      <div class="step-num">1</div>
+      <div class="step-label">基础配置</div>
+    </div>
+    <div class="step" id="step2-indicator">
+      <div class="step-num">2</div>
+      <div class="step-label">数据上传</div>
+    </div>
+    <div class="step" id="step3-indicator">
+      <div class="step-num">3</div>
+      <div class="step-label">提交计算</div>
+    </div>
+  </div>
+
+  <!-- New Task Card -->
+  <div class="card">
+    <div class="card-header">
+      <span class="icon">📝</span>
+      <h2>新建计算任务</h2>
+    </div>
+    <div class="card-body">
+
+      <!-- Step 1: 基础配置 -->
+      <div id="step1-panel">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Season <span class="required">*</span></label>
+            <select id="season-select">
+              <option value="">请选择 Season</option>
+              <option value="S27F" selected>S27F</option>
+              <option value="S27S">S27S</option>
+              <option value="S28F">S28F</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>轮次 <span class="required">*</span></label>
+            <select id="round-select">
+              <option value="">请选择轮次</option>
+              <option value="Round1" selected>Round 1</option>
+              <option value="Round2">Round 2</option>
+              <option value="FC_May">FC May</option>
+            </select>
+          </div>
+        </div>
+        <div class="btn-group">
+          <button class="btn btn-primary" onclick="goToStep(2)">下一步 →</button>
+        </div>
+      </div>
+
+      <!-- Step 2: 数据上传 -->
+      <div id="step2-panel" style="display:none;">
+
+        <!-- 必传数据源 -->
+        <div class="section-title" style="margin-top:0;">必传数据源</div>
+
+        <!-- Mold Master Data -->
+        <div class="upload-area" id="upload-area-master" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event, 'master')">
+          <input type="file" id="file-master" accept=".xlsx,.xls" onchange="handleFileSelect(event, 'master')">
+          <div class="upload-icon">📊</div>
+          <div class="upload-text"><strong>Mold Master Data</strong>（16 列标准模板）</div>
+          <div class="upload-hint">点击上传或拖拽文件到此处 · 支持 .xlsx</div>
+        </div>
+        <div class="template-links" style="margin-top:8px; margin-bottom:18px;">
+          <a href="#" class="btn btn-sm btn-outline" onclick="alert('下载 Mold Master Data 标准模板')">📄 下载标准模板</a>
+        </div>
+        <div class="file-list" id="file-list-master"></div>
+        <div class="validation-result" id="validation-master"></div>
+
+        <!-- Forecast -->
+        <div class="upload-area" id="upload-area-forecast" style="margin-top:14px;" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event, 'forecast')">
+          <input type="file" id="file-forecast" accept=".xlsx,.xls" onchange="handleFileSelect(event, 'forecast')">
+          <div class="upload-icon">📈</div>
+          <div class="upload-text"><strong>Forecast</strong>（Global Planning）</div>
+          <div class="upload-hint">点击上传或拖拽文件到此处 · 支持 .xlsx</div>
+        </div>
+        <div class="file-list" id="file-list-forecast"></div>
+        <div class="validation-result" id="validation-forecast"></div>
+
+        <!-- 可选数据源 -->
+        <div class="section-title" style="margin-top:24px;">可选数据源</div>
+
+        <!-- 旧模库存手工匹配结果 -->
+        <div class="info-box">
+          <strong>💡 为什么需要这个文件？</strong><br>
+          Old Mold 的现有库存来自 Mold Asset System，但匹配率仅约 80%。<br>
+          业务可以通过手工盘点/工厂确认，补充未匹配模具的库存数量。<br>
+          上传后，系统会将手工匹配结果与 Asset 数据合并，提高计算精度。
+        </div>
+
+        <div class="upload-area" id="upload-area-oldmatch" style="background:#f0f9ff; border-color:#bae6fd;" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event, 'oldmatch')">
+          <input type="file" id="file-oldmatch" accept=".xlsx,.xls" onchange="handleFileSelect(event, 'oldmatch')">
+          <div class="upload-icon">📋</div>
+          <div class="upload-text"><strong>旧模库存手工匹配结果</strong> <span style="color:var(--info);font-size:12px;">可选</span></div>
+          <div class="upload-hint">mold_code_short + material + supplier + existing_mold_qty</div>
+        </div>
+        <div class="template-links" style="margin-top:8px; margin-bottom:18px;">
+          <a href="#" class="btn btn-sm btn-outline" onclick="alert('下载旧模库存手工匹配模板')">📄 下载匹配模板</a>
+          <a href="#" class="btn btn-sm btn-outline" onclick="alert('查看当前未匹配模具清单（197条）')">🔍 查看未匹配清单</a>
+        </div>
+        <div class="file-list" id="file-list-oldmatch"></div>
+        <div class="validation-result" id="validation-oldmatch"></div>
+
+        <!-- 预置数据源状态 -->
+        <div class="section-title" style="margin-top:24px;">预置基础数据状态</div>
+        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+          <span class="tag tag-success">✅ Assets Master List</span>
+          <span class="tag tag-success">✅ LineSheet (PLM)</span>
+          <span class="tag tag-warning" id="tag-leadtime" style="cursor:pointer;" onclick="showPage('config')">⚠️ Transportation Leadtime</span>
+          <span class="tag tag-success">✅ Supplier Country</span>
+          <span class="tag tag-success">✅ Factory-Style Allocation</span>
+        </div>
+        <div class="form-hint" style="margin-top:8px;">
+          点击 ⚠️ 标记的数据源可前往配置页更新。其他数据源由系统定期同步。
+        </div>
+
+        <div class="btn-group" style="margin-top: 24px;">
+          <button class="btn btn-outline" onclick="goToStep(1)">← 上一步</button>
+          <button class="btn btn-primary" id="btn-submit" disabled onclick="submitCalculation()">提交计算</button>
+        </div>
+      </div>
+
+      <!-- Step 3: 计算中 & 结果 -->
+      <div id="step3-panel" style="display:none;">
+        <!-- 计算中 -->
+        <div id="calculating-panel">
+          <div style="text-align:center; padding: 30px 0;">
+            <div style="font-size: 40px; margin-bottom: 14px;">⏳</div>
+            <div style="font-size: 16px; font-weight: 600; margin-bottom: 6px;">计算中...</div>
+            <div style="font-size: 13px; color: var(--text-muted); margin-bottom: 18px;">正在执行模具产能分析，请稍候</div>
+            <div class="progress-bar" style="max-width: 420px; margin: 0 auto;">
+              <div class="progress-bar-fill" id="progress-fill"></div>
+            </div>
+            <div style="font-size: 12px; color: var(--text-muted); margin-top: 10px;" id="progress-text">初始化...</div>
+          </div>
+        </div>
+
+        <!-- 计算完成结果 -->
+        <div class="result-card" id="result-card">
+          <div class="rc-title">
+            <span>✅</span>
+            <span id="result-season">S27F - Round 1 计算完成</span>
+          </div>
+
+          <!-- 加模分析 KPI -->
+          <div style="font-size: 13px; font-weight: 600; color: var(--text-muted); margin-bottom: 10px;">📊 加模分析结果</div>
+          <div class="result-kpis">
+            <div class="result-kpi">
+              <div class="value" id="kpi-total">225</div>
+              <div class="label">总模具线数</div>
+            </div>
+            <div class="result-kpi">
+              <div class="value" id="kpi-need" style="color: var(--warning);">41</div>
+              <div class="label">需加模线数</div>
+            </div>
+            <div class="result-kpi">
+              <div class="value" id="kpi-add" style="color: var(--danger);">891</div>
+              <div class="label">总加模数量</div>
+            </div>
+            <div class="result-kpi">
+              <div class="value" id="kpi-rate" style="color: var(--success);">81.8%</div>
+              <div class="label">产能充足率</div>
+            </div>
+          </div>
+
+          <!-- 旧模库存匹配率（新增） -->
+          <div style="font-size: 13px; font-weight: 600; color: var(--text-muted); margin: 16px 0 10px;">📦 旧模库存匹配情况</div>
+          <div class="match-section">
+            <div class="ms-title">🔄 Mold Master → Assets Master List 匹配率</div>
+            <div class="match-bar-container">
+              <div class="match-bar-bg">
+                <div class="match-bar-fill medium" id="match-bar" style="width: 80%;"></div>
+              </div>
+              <div class="match-bar-text" id="match-text">80.0%</div>
+            </div>
+            <div style="display:flex; gap: 20px; margin-top: 10px; font-size: 13px;">
+              <div><span style="color:var(--success); font-weight:600;">✅ 已匹配</span> <strong id="match-yes">116</strong> 条</div>
+              <div><span style="color:var(--danger); font-weight:600;">❌ 未匹配</span> <strong id="match-no">29</strong> 条</div>
+              <div><span style="color:var(--info); font-weight:600;">📋 手工补充</span> <strong id="match-manual">12</strong> 条</div>
+            </div>
+            <div style="margin-top: 12px; padding-top: 12px; border-top: 1px dashed #fde68a; font-size: 12px; color: #92400e;">
+              💡 <strong>提示：</strong>未匹配的 29 条 Old Mold 被默认设置为 existing_mold_qty = 1，可能导致加模需求被高估。
+              建议业务持续补充手工匹配结果，提高计算精度。
+            </div>
+          </div>
+
+          <!-- 风险提醒 -->
+          <div class="result-risks" style="margin-top: 14px;">
+            <div class="risk-title">⚠️ 风险提示</div>
+            <div class="risk-item">🔴 <strong>3 条 Share Mold 线</strong> 即使加 200 套模具仍无法满足交期</div>
+            <div class="risk-item">🟡 <strong>2 条 Old Mold 线</strong> 触发 mold_not_ready（模具未就绪）</div>
+            <div class="risk-item">🔴 <strong>Top 缺口：</strong>HOKA-S27-011 需加模 228 套</div>
+          </div>
+
+          <div class="btn-group">
+            <button class="btn btn-primary" onclick="alert('跳转至 Power BI 看板')">📊 查看 Power BI 详细分析</button>
+            <button class="btn btn-success" onclick="alert('下载统一结果 Excel（含 summary / detail / risk_list / match_report）')">📥 下载统一结果</button>
+            <button class="btn btn-outline" onclick="alert('下载旧模库存匹配报告（含未匹配清单）')">📋 下载匹配报告</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- History Section -->
+  <div class="section-title">历史任务</div>
+  <div class="card">
+    <div class="card-body-nopad">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Season</th>
+            <th>轮次</th>
+            <th>模具线数</th>
+            <th>需加模</th>
+            <th>总加模量</th>
+            <th>旧模匹配率</th>
+            <th>状态</th>
+            <th>计算时间</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>S27F</strong></td>
+            <td>Round 1</td>
+            <td>225</td>
+            <td>41</td>
+            <td>891</td>
+            <td><span class="tag tag-warning">80.0%</span></td>
+            <td><span class="tag tag-success">✅ 完成</span></td>
+            <td>2026-05-20 14:32</td>
+            <td><a href="#" class="action-link" onclick="alert('查看 S27F Round1 结果')">查看</a></td>
+          </tr>
+          <tr>
+            <td><strong>S27S</strong></td>
+            <td>Round 1</td>
+            <td>198</td>
+            <td>35</td>
+            <td>720</td>
+            <td><span class="tag tag-warning">78.5%</span></td>
+            <td><span class="tag tag-success">✅ 完成</span></td>
+            <td>2026-05-18 09:15</td>
+            <td><a href="#" class="action-link" onclick="alert('查看 S27S Round1 结果')">查看</a></td>
+          </tr>
+          <tr>
+            <td><strong>S27F</strong></td>
+            <td>Round 2</td>
+            <td>—</td>
+            <td>—</td>
+            <td>—</td>
+            <td>—</td>
+            <td><span class="tag tag-info">⏳ 计算中</span></td>
+            <td>2026-05-20 16:00</td>
+            <td><span style="color: var(--text-muted); font-size: 13px;">等待中</span></td>
+          </tr>
+          <tr>
+            <td><strong>S26F</strong></td>
+            <td>FC Final</td>
+            <td>210</td>
+            <td>38</td>
+            <td>650</td>
+            <td><span class="tag tag-success">85.2%</span></td>
+            <td><span class="tag tag-success">✅ 完成</span></td>
+            <td>2026-04-10 11:20</td>
+            <td><a href="#" class="action-link" onclick="alert('查看 S26F FC Final 结果')">查看</a></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div><!-- /page-task -->
+
+
+<!-- ==================== PAGE 2: 基础数据源配置 ==================== -->
+<div class="page" id="page-config">
+
+  <!-- 数据源总览 -->
+  <div class="card">
+    <div class="card-header">
+      <span class="icon">📋</span>
+      <h2>数据源总览</h2>
+    </div>
+    <div class="card-body">
+      <div class="config-grid">
+        <div class="config-card">
+          <div class="cc-icon">📊</div>
+          <div class="cc-name">Mold Master Data</div>
+          <div class="cc-desc">业务每季上传，16列核心字段</div>
+          <div class="cc-status"><span class="tag tag-info">业务上传</span></div>
+        </div>
+        <div class="config-card">
+          <div class="cc-icon">📈</div>
+          <div class="cc-name">Forecast</div>
+          <div class="cc-desc">Global Planning，按尺码月度拆分</div>
+          <div class="cc-status"><span class="tag tag-info">业务上传</span></div>
+        </div>
+        <div class="config-card">
+          <div class="cc-icon">🏭</div>
+          <div class="cc-name">Assets Master List</div>
+          <div class="cc-desc">Mold Asset System，旧模库存台账</div>
+          <div class="cc-status"><span class="tag tag-success">✅ 已同步</span></div>
+        </div>
+        <div class="config-card">
+          <div class="cc-icon">📄</div>
+          <div class="cc-name">LineSheet</div>
+          <div class="cc-desc">PLM 导出，产品基础信息</div>
+          <div class="cc-status"><span class="tag tag-success">✅ 已同步</span></div>
+        </div>
+        <div class="config-card" style="border-color: var(--warning);">
+          <div class="cc-icon">🚚</div>
+          <div class="cc-name">Transportation Leadtime</div>
+          <div class="cc-desc">供应商国家 → 工厂国家运输天数</div>
+          <div class="cc-status"><span class="tag tag-warning">⚠️ 需更新</span></div>
+        </div>
+        <div class="config-card">
+          <div class="cc-icon">🔗</div>
+          <div class="cc-name">Factory Allocation</div>
+          <div class="cc-desc">Share Mold 场景工厂-款式分配</div>
+          <div class="cc-status"><span class="tag tag-success">✅ 已同步</span></div>
+        </div>
+        <div class="config-card">
+          <div class="cc-icon">🌍</div>
+          <div class="cc-name">Supplier Country</div>
+          <div class="cc-desc">供应商 → 国家映射</div>
+          <div class="cc-status"><span class="tag tag-success">✅ 已同步</span></div>
+        </div>
+        <div class="config-card" style="opacity: 0.5;">
+          <div class="cc-icon">📅</div>
+          <div class="cc-name">Factory Working Holiday</div>
+          <div class="cc-desc">工厂实际工作日历（Phase 2）</div>
+          <div class="cc-status"><span class="tag" style="background:#e5e7eb; color:#6b7280;">🔮 未来引入</span></div>
+        </div>
+        <div class="config-card" style="opacity: 0.5;">
+          <div class="cc-icon">⏱️</div>
+          <div class="cc-name">Mold Opening Leadtime</div>
+          <div class="cc-desc">下单→可用标准提前期（Phase 2）</div>
+          <div class="cc-status"><span class="tag" style="background:#e5e7eb; color:#6b7280;">🔮 未来引入</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Transportation Leadtime 配置 -->
+  <div class="card">
+    <div class="card-header">
+      <span class="icon">🚚</span>
+      <h2>Transportation Leadtime 配置</h2>
+      <span class="tag tag-warning" style="margin-left:auto;">⚠️ 待更新</span>
+    </div>
+    <div class="card-body">
+      <div class="info-box">
+        <strong>说明：</strong>此表用于计算模具从供应商到成鞋工厂的运输提前期。
+        当供应商国家或工厂国家发生变化时，需要及时更新。
+      </div>
+      <div style="margin-bottom: 12px;">
+        <button class="btn btn-primary btn-sm" onclick="alert('添加新路线')">+ 添加路线</button>
+        <button class="btn btn-outline btn-sm" onclick="alert('导入 Excel 更新')">📥 批量导入</button>
+      </div>
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>供应商国家</th>
+            <th>工厂国家</th>
+            <th>运输天数范围</th>
+            <th>transfer_lead_time</th>
+            <th>最后更新</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>China</td>
+            <td>Cambodia</td>
+            <td>10-12 days</td>
+            <td>12</td>
+            <td>2026-01-15</td>
+            <td><a href="#" class="action-link" onclick="alert('编辑')">编辑</a> · <a href="#" class="action-link" style="color:var(--danger);" onclick="alert('删除')">删除</a></td>
+          </tr>
+          <tr>
+            <td>China</td>
+            <td>Indonesia</td>
+            <td>15-20 days</td>
+            <td>20</td>
+            <td>2026-01-15</td>
+            <td><a href="#" class="action-link" onclick="alert('编辑')">编辑</a> · <a href="#" class="action-link" style="color:var(--danger);" onclick="alert('删除')">删除</a></td>
+          </tr>
+          <tr>
+            <td>China</td>
+            <td>North Vietnam</td>
+            <td>7-10 days</td>
+            <td>10</td>
+            <td>2026-01-15</td>
+            <td><a href="#" class="action-link" onclick="alert('编辑')">编辑</a> · <a href="#" class="action-link" style="color:var(--danger);" onclick="alert('删除')">删除</a></td>
+          </tr>
+          <tr style="background: var(--warning-light);">
+            <td><strong>China</strong></td>
+            <td><strong>Philippine</strong></td>
+            <td><strong>22-25 days</strong></td>
+            <td><strong>25</strong></td>
+            <td><span style="color:var(--danger);">2025-08-10 ⚠️ 已过期</span></td>
+            <td><a href="#" class="action-link" onclick="alert('编辑')">编辑</a> · <a href="#" class="action-link" style="color:var(--danger);" onclick="alert('删除')">删除</a></td>
+          </tr>
+          <tr>
+            <td>North Vietnam</td>
+            <td>North Vietnam</td>
+            <td>3-5 days</td>
+            <td>5</td>
+            <td>2026-01-15</td>
+            <td><a href="#" class="action-link" onclick="alert('编辑')">编辑</a> · <a href="#" class="action-link" style="color:var(--danger);" onclick="alert('删除')">删除</a></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 旧模库存匹配管理 -->
+  <div class="card">
+    <div class="card-header">
+      <span class="icon">📦</span>
+      <h2>旧模库存匹配管理</h2>
+    </div>
+    <div class="card-body">
+      <div class="two-col">
+        <div>
+          <div style="font-size: 14px; font-weight: 600; margin-bottom: 10px;">S27F Round 1 匹配统计</div>
+          <div class="match-section" style="margin-top:0;">
+            <div class="match-bar-container">
+              <div class="match-bar-bg"><div class="match-bar-fill medium" style="width:80%"></div></div>
+              <div class="match-bar-text">80.0%</div>
+            </div>
+            <div style="display:flex; flex-direction:column; gap:6px; margin-top:10px; font-size: 13px;">
+              <div>✅ <strong>已匹配</strong> 116 条（来自 Assets Master List）</div>
+              <div>📋 <strong>手工补充</strong> 12 条（业务上传）</div>
+              <div>❌ <strong>未匹配</strong> 29 条（需持续补充）</div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div style="font-size: 14px; font-weight: 600; margin-bottom: 10px;">未匹配模具清单（Top 5）</div>
+          <table class="data-table">
+            <thead>
+              <tr><th>Mold Code</th><th>Component</th><th>Supplier</th><th>状态</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>HOKA-F17-006</td><td>Midsole</td><td>WN-SVNWN</td><td><span class="tag tag-danger">未匹配</span></td></tr>
+              <tr><td>HOKA-F18-001</td><td>Midsole</td><td>HF-NVNAS</td><td><span class="tag tag-danger">未匹配</span></td></tr>
+              <tr><td>HOKA-F18-005</td><td>Midsole</td><td>HF-NVNAS</td><td><span class="tag tag-danger">未匹配</span></td></tr>
+              <tr><td>HOKA-F22-005</td><td>Outsole</td><td>VB-SCNVB</td><td><span class="tag tag-warning">待确认</span></td></tr>
+              <tr><td>HOKA-F23-001</td><td>Midsole</td><td>GS-SCNSX</td><td><span class="tag tag-warning">待确认</span></td></tr>
+            </tbody>
+          </table>
+          <div style="margin-top: 10px;">
+            <button class="btn btn-outline btn-sm" onclick="alert('下载完整未匹配清单（29条）')">📥 下载完整清单</button>
+            <button class="btn btn-primary btn-sm" onclick="showPage('task'); goToStep(2);" style="margin-left:8px;">⬆️ 上传手工匹配结果</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /page-config -->
+
+</div><!-- /container -->
+
+<script>
+  let currentStep = 1;
+  let files = { master: null, forecast: null, oldmatch: null };
+  let validations = { master: false, forecast: false };
+
+  // === Page Navigation ===
+  function showPage(page) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById('page-' + page).classList.add('active');
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    document.getElementById('nav-' + page).classList.add('active');
+  }
+
+  // === Step Navigation ===
+  function goToStep(step) {
+    currentStep = step;
+    document.getElementById('step1-panel').style.display = 'none';
+    document.getElementById('step2-panel').style.display = 'none';
+    document.getElementById('step3-panel').style.display = 'none';
+    document.getElementById('step' + step + '-panel').style.display = 'block';
+    for (let i = 1; i <= 3; i++) {
+      const el = document.getElementById('step' + i + '-indicator');
+      el.classList.remove('active', 'completed');
+      if (i < step) el.classList.add('completed');
+      else if (i === step) el.classList.add('active');
+    }
+  }
+
+  // === File Upload ===
+  function handleDragOver(e) { e.preventDefault(); e.currentTarget.classList.add('dragover'); }
+  function handleDragLeave(e) { e.preventDefault(); e.currentTarget.classList.remove('dragover'); }
+  function handleDrop(e, type) { e.preventDefault(); e.currentTarget.classList.remove('dragover'); if (e.dataTransfer.files.length > 0) processFile(e.dataTransfer.files[0], type); }
+  function handleFileSelect(e, type) { if (e.target.files.length > 0) processFile(e.target.files[0], type); }
+
+  function processFile(file, type) {
+    files[type] = file;
+    const sizeKB = (file.size / 1024).toFixed(1);
+    const listId = 'file-list-' + type;
+    const list = document.getElementById(listId);
+    const isOptional = type === 'oldmatch';
+    const requiredText = isOptional ? '<span style="color:var(--info);">可选</span>' : '<span class="required">*</span>';
+
+    const labels = {
+      master: { icon: '📊', name: 'Mold Master Data' },
+      forecast: { icon: '📈', name: 'Forecast' },
+      oldmatch: { icon: '📋', name: '旧模库存手工匹配结果' },
+    };
+    const label = labels[type];
+
+    list.innerHTML = `
+      <div class="file-item">
+        <span class="file-icon">${label.icon}</span>
+        <div class="file-info">
+          <div class="file-name">${label.name} — ${file.name}</div>
+          <div class="file-meta">${sizeKB} KB · ${file.type || 'Excel'}</div>
+        </div>
+        <span class="file-status pending" id="file-status-${type}">待校验</span>
+      </div>
+    `;
+
+    // Simulate validation
+    setTimeout(() => {
+      document.getElementById('file-status-' + type).className = 'file-status validating';
+      document.getElementById('file-status-' + type).textContent = '校验中...';
+    }, 300);
+
+    setTimeout(() => {
+      const statusEl = document.getElementById('file-status-' + type);
+      if (type === 'oldmatch') {
+        statusEl.className = 'file-status optional';
+        statusEl.textContent = '已上传（可选）';
+        showValidation(type, 'pass', '可选文件已接收', '<p>📋 旧模库存手工匹配结果已上传，将在计算时与 Assets Master List 合并使用。</p>');
+      } else {
+        statusEl.className = 'file-status pass';
+        statusEl.textContent = '校验通过';
+        showValidation(type, 'pass', '数据校验通过', generatePassDetail(type));
+        validations[type] = true;
+      }
+      checkSubmitReady();
+    }, 1200 + Math.random() * 800);
+  }
+
+  function generatePassDetail(type) {
+    if (type === 'master') {
+      return `<p>✅ 字段完整性检查通过（16 列）</p>
+              <p>✅ Brand 标准化：HOKA / UGG / TEVA</p>
+              <p>✅ Cycle Time 格式正确（全部 > 0）</p>
+              <p>⚠️ <strong>警告：</strong>第 3 行 Factory 为空，计算时将跳过该行</p>
+              <p>⚠️ <strong>警告：</strong>已自动删除 1 行 Brand 为空的数据</p>`;
+    }
+    return `<p>✅ Forecast 格式正确</p>
+            <p>✅ Season 标识一致</p>
+            <p>✅ 数量字段格式正确</p>`;
+  }
+
+  function showValidation(type, status, title, detail) {
+    const el = document.getElementById('validation-' + type);
+    el.className = 'validation-result show ' + status;
+    const color = status === 'pass' ? 'var(--success)' : 'var(--danger)';
+    const icon = status === 'pass' ? '✅' : '❌';
+    el.innerHTML = `
+      <div class="vr-title" style="color:${color};">${icon} ${title}</div>
+      <div class="vr-detail">${detail}</div>
+    `;
+  }
+
+  function checkSubmitReady() {
+    const ready = validations.master && validations.forecast;
+    document.getElementById('btn-submit').disabled = !ready;
+  }
+
+  // === Submit Calculation ===
+  function submitCalculation() {
+    if (!validations.master || !validations.forecast) return;
+    goToStep(3);
+
+    const season = document.getElementById('season-select').value;
+    const round = document.getElementById('round-select').value;
+    document.getElementById('result-season').textContent = `${season} - ${round} 计算完成`;
+
+    const fill = document.getElementById('progress-fill');
+    const text = document.getElementById('progress-text');
+    const stages = [
+      { pct: 15, text: '读取 Mold Master Data...', delay: 400 },
+      { pct: 25, text: '读取 Forecast...', delay: 700 },
+      { pct: 35, text: '数据清洗与标准化...', delay: 1000 },
+      { pct: 45, text: '关联 Assets Master List...', delay: 1300 },
+      { pct: 55, text: '旧模库存匹配（匹配率 80.0%）...', delay: 1600 },
+      { pct: 65, text: 'New Mold 场景计算中...', delay: 1900 },
+      { pct: 75, text: 'Old Mold 场景计算中...', delay: 2200 },
+      { pct: 85, text: 'Allocation 场景计算中...', delay: 2500 },
+      { pct: 95, text: '生成统一结果 & 匹配报告...', delay: 2800 },
+      { pct: 100, text: '计算完成', delay: 3100 },
+    ];
+
+    stages.forEach(s => {
+      setTimeout(() => {
+        fill.style.width = s.pct + '%';
+        text.textContent = s.text;
+      }, s.delay);
+    });
+
+    setTimeout(() => {
+      document.getElementById('calculating-panel').style.display = 'none';
+      document.getElementById('result-card').classList.add('show');
+      // Animate match bar
+      setTimeout(() => {
+        document.getElementById('match-bar').style.width = '80%';
+      }, 400);
+    }, 3400);
+  }
+</script>
+
+</body>
+</html>
