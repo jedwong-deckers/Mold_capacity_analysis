@@ -868,24 +868,26 @@
   const previewData = {
     leadtime: {
       title: '🚚 Transportation Leadtime Preview',
-      headers: ['supplier_country', 'factory_country', 'Transportation lead-time', 'transfer_lead_time'],
+      headers: ['supplier_country', 'factory_country', 'Min Days', 'Max Days', 'transfer_lead_time'],
       rows: [
-        ['China', 'Cambodia', '10-12 days', '12'],
-        ['China', 'Indonesia', '15-20 days', '20'],
-        ['China', 'North China', '3-4 days', '4'],
-        ['China', 'North Vietnam', '7-10 days', '10'],
-        ['China', 'Philippine', '22-25 days', '25'],
-        ['China', 'South Vietnam', '15-18 days', '18'],
-        ['North Vietnam', 'North Vietnam', '3-5 days', '5'],
-        ['North Vietnam', 'South Vietnam', '5-7 days', '7'],
-        ['South Vietnam', 'South Vietnam', '2-4 days', '4'],
+        ['China', 'Cambodia', '10', '12', '12'],
+        ['China', 'Indonesia', '15', '20', '20'],
+        ['China', 'North China', '3', '4', '4'],
+        ['China', 'North Vietnam', '7', '10', '10'],
+        ['China', 'Philippine', '22', '25', '25'],
+        ['China', 'South Vietnam', '15', '18', '18'],
+        ['North Vietnam', 'North Vietnam', '3', '5', '5'],
+        ['North Vietnam', 'South Vietnam', '5', '7', '7'],
+        ['South Vietnam', 'South Vietnam', '2', '4', '4'],
       ],
       editable: true,
       addable: true,
+      daysRange: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30],
       columns: [
         { type: 'select', options: ['China', 'North Vietnam', 'South Vietnam', 'Cambodia', 'Indonesia', 'Philippine'] },
         { type: 'select', options: ['China', 'North Vietnam', 'South Vietnam', 'Cambodia', 'Indonesia', 'Philippine'] },
-        { type: 'select', options: ['2-4 days', '3-4 days', '3-5 days', '5-7 days', '7-10 days', '10-12 days', '15-18 days', '15-20 days', '22-25 days'] },
+        { type: 'select', source: 'daysRange' },
+        { type: 'select', source: 'daysRange' },
         { type: 'number' }
       ]
     },
@@ -936,13 +938,17 @@
 
   let currentPreviewType = null;
 
-  function renderEditableCell(value, rowIdx, colIdx, column) {
+  function renderEditableCell(value, rowIdx, colIdx, column, data) {
     const baseStyle = 'width:100%;border:none;background:transparent;font-size:12px;padding:4px 2px;font-family:inherit;';
     const focusBlur = ' onfocus="this.style.background=\'#e0f2fe\'" onblur="this.style.background=\'transparent\'"';
     if (column.type === 'select') {
+      let options = column.options || [];
+      if (column.source === 'daysRange' && data.daysRange) {
+        options = data.daysRange.map(d => String(d));
+      }
       let html = '<select data-row="' + rowIdx + '" data-col="' + colIdx + '" style="' + baseStyle + 'cursor:pointer;">';
-      column.options.forEach(opt => {
-        html += '<option value="' + opt + '"' + (opt === value ? ' selected' : '') + '>' + opt + '</option>';
+      options.forEach(opt => {
+        html += '<option value="' + opt + '"' + (String(opt) === String(value) ? ' selected' : '') + '>' + opt + '</option>';
       });
       html += '</select>';
       return html;
@@ -983,7 +989,7 @@
       html += '<tr data-row-idx="' + rowIdx + '">';
       row.forEach((cell, colIdx) => {
         if (isEditable) {
-          html += '<td>' + renderEditableCell(cell, rowIdx, colIdx, data.columns[colIdx]) + '</td>';
+          html += '<td>' + renderEditableCell(cell, rowIdx, colIdx, data.columns[colIdx], data) + '</td>';
         } else {
           html += '<td>' + cell + '</td>';
         }
