@@ -490,23 +490,22 @@
           <div class="upload-hint">Supplement Old Mold inventory not matched in Assets</div>
         </div>
         <div class="template-links">
-          <a href="#" class="template-link" onclick="alert('Download Old Mold Manual Match template')">📄 Download Template</a>
-          <a href="#" class="template-link" onclick="alert('View current unmatched mold list (29 items)')">🔍 View Unmatched List</a>
+          <a href="#" class="template-link" onclick="alert('Download mapping list')">📄 Download Mapping List</a>
         </div>
         <div class="file-list" id="modal-file-list-oldmatch"></div>
         <div class="validation-result" id="modal-validation-oldmatch"></div>
 
-        <!-- Base Data Source Readiness -->
+        <!-- Linked Base Data Sources -->
         <div style="margin-top: 20px; padding: 14px 16px; background: #f9fafb; border: 1px solid var(--border); border-radius: 8px;">
-          <div style="font-size: 13px; font-weight: 600; margin-bottom: 10px;">🔌 Base Data Source Readiness</div>
+          <div style="font-size: 13px; font-weight: 600; margin-bottom: 10px;">🔌 Linked Base Data Sources</div>
           <div style="display: flex; gap: 8px; flex-wrap: wrap; font-size: 12px;">
-            <span class="tag tag-success">✅ Assets Master List</span>
-            <span class="tag tag-success">✅ LineSheet (PLM)</span>
-            <span class="tag tag-warning">⚠️ Transportation Leadtime</span>
-            <span class="tag tag-success">✅ Supplier Country</span>
+            <span class="tag tag-gray">Assets Master List</span>
+            <span class="tag tag-gray">LineSheet (PLM)</span>
+            <span class="tag tag-gray">Transportation Leadtime</span>
+            <span class="tag tag-gray">Supplier Country</span>
           </div>
-          <div class="form-hint" style="margin-top: 8px;">
-            The above data is pre-configured by the system. If marked with ⚠️, please update it in the Data Source Configuration page before running the calculation.
+          <div style="margin-top: 10px;">
+            <button class="btn btn-outline btn-sm" onclick="closeModal('modal-task'); showPage('config');">🔗 View Data Source Details</button>
           </div>
         </div>
 
@@ -516,39 +515,25 @@
         </div>
       </div>
 
-      <!-- Step 3: Run Calculation -->
+      <!-- Step 3: Submit Task -->
       <div id="modal-step3-panel" style="display:none;">
         <div id="modal-calculating" style="text-align:center; padding: 30px 0;">
           <div style="font-size: 40px; margin-bottom: 14px;">⏳</div>
-          <div style="font-size: 16px; font-weight: 600; margin-bottom: 6px;">Calculating...</div>
-          <div style="font-size: 13px; color: var(--text-muted); margin-bottom: 18px;">Running mold capacity analysis, please wait</div>
+          <div style="font-size: 16px; font-weight: 600; margin-bottom: 6px;">Submitting task...</div>
+          <div style="font-size: 13px; color: var(--text-muted); margin-bottom: 18px;">Uploading data and creating the calculation task</div>
           <div class="progress-bar" style="max-width: 420px; margin: 0 auto;">
             <div class="progress-bar-fill" id="modal-progress-fill"></div>
           </div>
           <div style="font-size: 12px; color: var(--text-muted); margin-top: 10px;" id="modal-progress-text">Initializing...</div>
         </div>
 
-        <div id="modal-task-result" style="display:none;">
-          <div class="result-card">
-            <div class="rc-title">✅ <span id="modal-result-title">Calculation Complete</span></div>
-            <div class="result-kpis">
-              <div class="result-kpi"><div class="value">225</div><div class="label">Total Mold Lines</div></div>
-              <div class="result-kpi"><div class="value" style="color:var(--warning);">41</div><div class="label">Need Additional</div></div>
-              <div class="result-kpi"><div class="value" style="color:var(--danger);">891</div><div class="label">Total Additional Qty</div></div>
-              <div class="result-kpi"><div class="value" style="color:var(--success);">81.8%</div><div class="label">Capacity Sufficiency</div></div>
-            </div>
-            <div class="result-risks">
-              <div class="risk-title">⚠️ Risk Alerts</div>
-              <div class="risk-item">🔴 3 Share Mold lines still cannot meet delivery even with 200 additional molds</div>
-              <div class="risk-item">🟡 2 Old Mold lines trigger mold_not_ready</div>
-              <div class="risk-item">🔴 Top gap: HOKA-S27-011 needs 228 additional molds</div>
-            </div>
-            <div class="btn-group" style="justify-content: center;">
-              <button class="btn btn-primary" onclick="alert('Open Power BI')">📊 View Power BI</button>
-              <button class="btn btn-success" onclick="alert('Download analysis result Excel')">📥 Download Analysis Result</button>
-              <button class="btn btn-outline" onclick="alert('Download old mold mismatch Excel')">📥 Download Old Mold Mismatch</button>
-            </div>
+        <div id="modal-task-created" style="display:none; text-align:center; padding: 40px 0;">
+          <div style="font-size: 50px; margin-bottom: 16px;">✅</div>
+          <div style="font-size: 18px; font-weight: 600; margin-bottom: 8px;">Task Created Successfully</div>
+          <div style="font-size: 14px; color: var(--text-muted); margin-bottom: 24px; max-width: 420px; margin-left: auto; margin-right: auto;">
+            The calculation task has been submitted. Results are not generated instantly. Please wait a few minutes, then return to the task list to view the result.
           </div>
+          <button class="btn btn-primary" onclick="closeModal('modal-task');">Back to Task List</button>
         </div>
       </div>
 
@@ -677,6 +662,7 @@
       document.getElementById('modal-validation-' + t).className = 'validation-result';
       document.getElementById('modal-validation-' + t).innerHTML = '';
     });
+    document.getElementById('modal-task-created').style.display = 'none';
     document.getElementById('modal-task-result').style.display = 'none';
     document.getElementById('modal-calculating').style.display = 'block';
     document.getElementById('modal-progress-fill').style.width = '0%';
@@ -722,27 +708,18 @@
     const fill = document.getElementById('modal-progress-fill');
     const text = document.getElementById('modal-progress-text');
     const stages = [
-      { pct: 15, text: 'Reading Mold Master Data...', delay: 400 },
-      { pct: 25, text: 'Reading Forecast...', delay: 700 },
-      { pct: 35, text: 'Reading Style-Factory Allocation...', delay: 900 },
-      { pct: 45, text: 'Data cleaning & standardization...', delay: 1200 },
-      { pct: 55, text: 'Linking Assets Master List...', delay: 1500 },
-      { pct: 60, text: 'Old Mold inventory matching (match rate 80.0%)...', delay: 1800 },
-      { pct: 70, text: 'Calculating New Mold scenario...', delay: 2100 },
-      { pct: 78, text: 'Calculating Old Mold scenario...', delay: 2400 },
-      { pct: 86, text: 'Calculating Allocation scenario...', delay: 2700 },
-      { pct: 95, text: 'Generating unified result & match report...', delay: 3000 },
-      { pct: 100, text: 'Calculation complete', delay: 3300 },
+      { pct: 25, text: 'Uploading files...', delay: 400 },
+      { pct: 50, text: 'Validating data format...', delay: 1000 },
+      { pct: 75, text: 'Creating calculation task...', delay: 1800 },
+      { pct: 100, text: 'Task created', delay: 2600 },
     ];
     stages.forEach(s => {
       setTimeout(() => { fill.style.width = s.pct + '%'; text.textContent = s.text; }, s.delay);
     });
     setTimeout(() => {
       document.getElementById('modal-calculating').style.display = 'none';
-      document.getElementById('modal-task-result').style.display = 'block';
-      document.getElementById('modal-result-title').textContent =
-        document.getElementById('modal-season').value + ' ' + document.getElementById('modal-round').value + ' Calculation Complete';
-    }, 3600);
+      document.getElementById('modal-task-created').style.display = 'block';
+    }, 2900);
   }
 
   // ===== Task Result Data =====
