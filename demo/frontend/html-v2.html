@@ -211,7 +211,7 @@
   <div class="header-inner">
     <div>
       <h1>🔧 Mold Capacity Analysis</h1>
-      <div class="subtitle">Phase 1 MVP — 智能产能核算与决策支持</div>
+      <div class="subtitle">Phase 1 MVP — Smart Capacity Planning & Decision Support</div>
     </div>
     <div class="header-badge">Demo v2.0</div>
   </div>
@@ -220,19 +220,19 @@
 <!-- Navigation -->
 <div class="nav-bar">
   <div class="nav-inner">
-    <button class="nav-item active" onclick="showPage('task')" id="nav-task">📝 计算任务</button>
-    <button class="nav-item" onclick="showPage('config')" id="nav-config">⚙️ 基础数据源配置</button>
+    <button class="nav-item active" onclick="showPage('task')" id="nav-task">📝 Tasks</button>
+    <button class="nav-item" onclick="showPage('config')" id="nav-config">⚙️ Data Sources</button>
   </div>
 </div>
 
 <div class="container">
 
-<!-- ==================== PAGE 1: 计算任务 ==================== -->
+<!-- ==================== PAGE 1: TASKS ==================== -->
 <div class="page active" id="page-task">
 
   <div class="page-header">
-    <h2>计算任务清单</h2>
-    <button class="btn btn-primary" onclick="openTaskModal('new')">+ 新建计算任务</button>
+    <h2>Task List</h2>
+    <button class="btn btn-primary" onclick="openTaskModal('new')">+ New Calculation Task</button>
   </div>
 
   <!-- Task List -->
@@ -242,32 +242,32 @@
         <thead>
           <tr>
             <th>Season</th>
-            <th>轮次</th>
-            <th>备注</th>
-            <th>模具线数</th>
-            <th>需加模</th>
-            <th>总加模量</th>
-            <th>旧模匹配率</th>
-            <th>状态</th>
-            <th>计算时间</th>
-            <th>操作</th>
+            <th>Round</th>
+            <th>Remark</th>
+            <th>Total Mold Lines</th>
+            <th>Need Additional</th>
+            <th>Total Qty</th>
+            <th>Old Mold Match Rate</th>
+            <th>Status</th>
+            <th>Created At</th>
+            <th>Actions</th>
           </tr>
         </thead>
         <tbody id="task-list-body">
           <tr data-task-id="1">
             <td><strong>S27F</strong></td>
             <td>after May buy</td>
-            <td style="max-width:150px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" title="首次FC验证，含Bondi allocation场景">首次FC验证，含Bondi allocation场景</td>
+            <td style="max-width:150px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" title="First FC validation, includes Bondi allocation scenario">First FC validation, includes Bondi allocation scenario</td>
             <td>225</td>
             <td>41</td>
             <td>891</td>
             <td><span class="tag tag-warning">80.0%</span></td>
-            <td><span class="tag tag-success">✅ 完成</span></td>
+            <td><span class="tag tag-success">✅ Done</span></td>
             <td>2026-05-20 14:32</td>
             <td>
-              <button class="action-link" onclick="openResultModal(1)">查看结果</button>
+              <button class="action-link" onclick="openResultModal(1)">View Result</button>
               <span style="color:var(--border);">|</span>
-              <button class="action-link" onclick="openTaskModal('edit', 1)">编辑</button>
+              <button class="action-link" onclick="openTaskModal('edit', 1)">Edit</button>
             </td>
           </tr>
           <tr data-task-id="2">
@@ -278,44 +278,44 @@
             <td>35</td>
             <td>720</td>
             <td><span class="tag tag-warning">78.5%</span></td>
-            <td><span class="tag tag-success">✅ 完成</span></td>
+            <td><span class="tag tag-success">✅ Done</span></td>
             <td>2026-05-18 09:15</td>
             <td>
-              <button class="action-link" onclick="openResultModal(2)">查看结果</button>
+              <button class="action-link" onclick="openResultModal(2)">View Result</button>
               <span style="color:var(--border);">|</span>
-              <button class="action-link" onclick="openTaskModal('edit', 2)">编辑</button>
+              <button class="action-link" onclick="openTaskModal('edit', 2)">Edit</button>
             </td>
           </tr>
           <tr data-task-id="3">
             <td><strong>S27F</strong></td>
             <td>after May buy</td>
-            <td style="max-width:150px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" title="FC更新后重跑">FC更新后重跑</td>
+            <td style="max-width:150px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" title="Re-run after FC update">Re-run after FC update</td>
             <td>—</td>
             <td>—</td>
             <td>—</td>
             <td>—</td>
-            <td><span class="tag tag-info">⏳ 计算中</span></td>
+            <td><span class="tag tag-info">⏳ Running</span></td>
             <td>2026-05-20 16:00</td>
             <td>
-              <button class="action-link disabled" disabled title="计算完成后可查看">查看结果</button>
+              <button class="action-link disabled" disabled title="Available after calculation completes">View Result</button>
               <span style="color:var(--border);">|</span>
-              <button class="action-link" onclick="alert('取消计算任务 #3')">取消</button>
+              <button class="action-link" onclick="alert('Cancel task #3')">Cancel</button>
             </td>
           </tr>
           <tr data-task-id="4">
             <td><strong>S26F</strong></td>
             <td>after March buy</td>
-            <td style="max-width:150px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" title="最终版，已归档">最终版，已归档</td>
+            <td style="max-width:150px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" title="Final version, archived">Final version, archived</td>
             <td>210</td>
             <td>38</td>
             <td>650</td>
             <td><span class="tag tag-success">85.2%</span></td>
-            <td><span class="tag tag-success">✅ 完成</span></td>
+            <td><span class="tag tag-success">✅ Done</span></td>
             <td>2026-04-10 11:20</td>
             <td>
-              <button class="action-link" onclick="openResultModal(4)">查看结果</button>
+              <button class="action-link" onclick="openResultModal(4)">View Result</button>
               <span style="color:var(--border);">|</span>
-              <button class="action-link" onclick="openTaskModal('edit', 4)">编辑</button>
+              <button class="action-link" onclick="openTaskModal('edit', 4)">Edit</button>
             </td>
           </tr>
         </tbody>
@@ -326,12 +326,12 @@
 </div><!-- /page-task -->
 
 
-<!-- ==================== PAGE 2: 基础数据源配置 ==================== -->
+<!-- ==================== PAGE 2: DATA SOURCES ==================== -->
 <div class="page" id="page-config">
 
   <div class="page-header">
-    <h2>基础数据源配置</h2>
-    <span class="form-hint" style="margin:0;">点击数据源卡片可预览数据 · 仅展示系统预置数据源</span>
+    <h2>Data Source Configuration</h2>
+    <span class="form-hint" style="margin:0;">Click a data source card to preview · System-managed sources only</span>
   </div>
 
   <!-- Config Cards -->
@@ -339,38 +339,38 @@
     <div class="config-card" onclick="openPreviewModal('assets')">
       <div class="cc-icon">🏭</div>
       <div class="cc-name">Assets Master List</div>
-      <div class="cc-desc">Mold Asset System 导出，旧模库存台账（2,198 行）</div>
-      <div class="cc-status"><span class="tag tag-success">✅ 已同步 · 2026-05-20</span></div>
+      <div class="cc-desc">Exported from Mold Asset System, old mold inventory ledger (2,198 rows)</div>
+      <div class="cc-status"><span class="tag tag-success">✅ Synced · 2026-05-20</span></div>
     </div>
     <div class="config-card" onclick="openPreviewModal('linesheet')">
       <div class="cc-icon">📄</div>
       <div class="cc-name">LineSheet</div>
-      <div class="cc-desc">PLM 导出，产品基础信息（611 行）</div>
-      <div class="cc-status"><span class="tag tag-success">✅ 已同步 · 2026-05-18</span></div>
+      <div class="cc-desc">Exported from PLM, product base info (611 rows)</div>
+      <div class="cc-status"><span class="tag tag-success">✅ Synced · 2026-05-18</span></div>
     </div>
     <div class="config-card" onclick="openPreviewModal('leadtime')">
       <div class="cc-icon">🚚</div>
       <div class="cc-name">Transportation Leadtime</div>
-      <div class="cc-desc">供应商国家 → 工厂国家运输天数（21 行）</div>
-      <div class="cc-status"><span class="tag tag-warning">⚠️ 需更新 · 1 条过期</span></div>
+      <div class="cc-desc">Supplier country → factory country transit days (21 rows)</div>
+      <div class="cc-status"><span class="tag tag-warning">⚠️ Needs update · 1 expired</span></div>
     </div>
     <div class="config-card" onclick="openPreviewModal('supplier')">
       <div class="cc-icon">🌍</div>
       <div class="cc-name">Supplier Country</div>
-      <div class="cc-desc">供应商 → 国家映射（61 行）</div>
-      <div class="cc-status"><span class="tag tag-success">✅ 已同步 · 2026-05-15</span></div>
+      <div class="cc-desc">Supplier → country mapping (61 rows)</div>
+      <div class="cc-status"><span class="tag tag-success">✅ Synced · 2026-05-15</span></div>
     </div>
     <div class="config-card" style="opacity:0.5; cursor:default;" onclick="return false;">
       <div class="cc-icon">📅</div>
       <div class="cc-name">Factory Working Holiday</div>
-      <div class="cc-desc">工厂实际工作日历（Phase 2 引入）</div>
-      <div class="cc-status"><span class="tag tag-gray">🔮 未来引入</span></div>
+      <div class="cc-desc">Factory working calendar (introduced in Phase 2)</div>
+      <div class="cc-status"><span class="tag tag-gray">🔮 Future</span></div>
     </div>
     <div class="config-card" style="opacity:0.5; cursor:default;" onclick="return false;">
       <div class="cc-icon">⏱️</div>
       <div class="cc-name">Mold Opening Leadtime</div>
-      <div class="cc-desc">下单→可用标准提前期（Phase 2 引入）</div>
-      <div class="cc-status"><span class="tag tag-gray">🔮 未来引入</span></div>
+      <div class="cc-desc">Order-to-available standard lead time (introduced in Phase 2)</div>
+      <div class="cc-status"><span class="tag tag-gray">🔮 Future</span></div>
     </div>
   </div>
 
@@ -379,11 +379,11 @@
 </div><!-- /container -->
 
 
-<!-- ==================== MODAL: 新建/编辑计算任务 ==================== -->
+<!-- ==================== MODAL: NEW/EDIT TASK ==================== -->
 <div class="modal-overlay" id="modal-task">
   <div class="modal">
     <div class="modal-header">
-      <h3 id="modal-task-title">📝 新建计算任务</h3>
+      <h3 id="modal-task-title">📝 New Calculation Task</h3>
       <button class="modal-close" onclick="closeModal('modal-task')">&times;</button>
     </div>
     <div class="modal-body">
@@ -392,34 +392,34 @@
       <div class="steps">
         <div class="step active" id="modal-step1-indicator">
           <div class="step-num">1</div>
-          <div class="step-label">基础配置</div>
+          <div class="step-label">Basic Config</div>
         </div>
         <div class="step" id="modal-step2-indicator">
           <div class="step-num">2</div>
-          <div class="step-label">数据上传</div>
+          <div class="step-label">Upload Data</div>
         </div>
         <div class="step" id="modal-step3-indicator">
           <div class="step-num">3</div>
-          <div class="step-label">提交计算</div>
+          <div class="step-label">Run Calculation</div>
         </div>
       </div>
 
-      <!-- Step 1: 基础配置 -->
+      <!-- Step 1: Basic Config -->
       <div id="modal-step1-panel">
         <div class="form-row">
           <div class="form-group">
             <label>Season <span class="required">*</span></label>
             <select id="modal-season">
-              <option value="">请选择</option>
+              <option value="">Select</option>
               <option value="S27F" selected>S27F</option>
               <option value="S27S">S27S</option>
               <option value="S28F">S28F</option>
             </select>
           </div>
           <div class="form-group">
-            <label>轮次（Buy 后） <span class="required">*</span></label>
+            <label>Round (after Buy) <span class="required">*</span></label>
             <select id="modal-round">
-              <option value="">请选择</option>
+              <option value="">Select</option>
               <option value="after March buy">after March buy</option>
               <option value="after April buy">after April buy</option>
               <option value="after May buy" selected>after May buy</option>
@@ -427,21 +427,21 @@
           </div>
         </div>
         <div class="form-group" style="margin-top: 8px;">
-          <label>备注 <span class="optional">（非必填）</span></label>
-          <textarea id="modal-remark" placeholder="例如：首次FC验证，含Bondi allocation场景，需重点关注HOKA新模..."></textarea>
+          <label>Remark <span class="optional">(optional)</span></label>
+          <textarea id="modal-remark" placeholder="e.g. First FC validation, includes Bondi allocation scenario, focus on HOKA new molds..."></textarea>
         </div>
         <div class="btn-group" style="justify-content: flex-end;">
-          <button class="btn btn-outline" onclick="closeModal('modal-task')">取消</button>
-          <button class="btn btn-primary" onclick="modalGoToStep(2)">下一步 →</button>
+          <button class="btn btn-outline" onclick="closeModal('modal-task')">Cancel</button>
+          <button class="btn btn-primary" onclick="modalGoToStep(2)">Next →</button>
         </div>
       </div>
 
-      <!-- Step 2: 数据上传 -->
+      <!-- Step 2: Upload Data -->
       <div id="modal-step2-panel" style="display:none;">
 
         <div class="info-box">
-          <strong>上传说明：</strong>Mold Master Data、Forecast、Style-Factory Allocation 为必传文件，请使用标准模板填写。
-          旧模库存手工匹配结果为可选，用于补充 Assets Master List 未覆盖的库存数据。
+          <strong>Upload instructions:</strong> Mold Master Data, Forecast, and Style-Factory Allocation are required. Please use the standard templates.
+          Old Mold Manual Match is optional, used to supplement inventory data not covered by Assets Master List.
         </div>
 
         <!-- Mold Master -->
@@ -449,11 +449,11 @@
         <div class="upload-area" id="modal-upload-master" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event, 'modal-master')">
           <input type="file" id="modal-file-master" accept=".xlsx" onchange="handleFileSelect(event, 'modal-master')">
           <div class="upload-icon">📊</div>
-          <div class="upload-text">点击上传或拖拽 Excel 文件</div>
-          <div class="upload-hint">16 列标准模板</div>
+          <div class="upload-text">Click to upload or drag & drop Excel file</div>
+          <div class="upload-hint">16-column standard template</div>
         </div>
         <div class="template-links">
-          <a href="#" class="template-link" onclick="alert('下载 Mold Master Data 模板')">📄 下载模板</a>
+          <a href="#" class="template-link" onclick="alert('Download Mold Master Data template')">📄 Download Template</a>
         </div>
         <div class="file-list" id="modal-file-list-master"></div>
         <div class="validation-result" id="modal-validation-master"></div>
@@ -463,11 +463,11 @@
         <div class="upload-area" id="modal-upload-forecast" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event, 'modal-forecast')">
           <input type="file" id="modal-file-forecast" accept=".xlsx" onchange="handleFileSelect(event, 'modal-forecast')">
           <div class="upload-icon">📈</div>
-          <div class="upload-text">点击上传或拖拽 Excel 文件</div>
+          <div class="upload-text">Click to upload or drag & drop Excel file</div>
           <div class="upload-hint">Global Planning Forecast</div>
         </div>
         <div class="template-links">
-          <a href="#" class="template-link" onclick="alert('下载 Forecast 模板')">📄 下载模板</a>
+          <a href="#" class="template-link" onclick="alert('Download Forecast template')">📄 Download Template</a>
         </div>
         <div class="file-list" id="modal-file-list-forecast"></div>
         <div class="validation-result" id="modal-validation-forecast"></div>
@@ -477,33 +477,33 @@
         <div class="upload-area" id="modal-upload-allocation" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event, 'modal-allocation')">
           <input type="file" id="modal-file-allocation" accept=".xlsx" onchange="handleFileSelect(event, 'modal-allocation')">
           <div class="upload-icon">🔗</div>
-          <div class="upload-text">点击上传或拖拽 Excel 文件</div>
+          <div class="upload-text">Click to upload or drag & drop Excel file</div>
           <div class="upload-hint">factory + style_color + supplier</div>
         </div>
         <div class="template-links">
-          <a href="#" class="template-link" onclick="alert('下载 Style-Factory Allocation 模板')">📄 下载模板</a>
+          <a href="#" class="template-link" onclick="alert('Download Style-Factory Allocation template')">📄 Download Template</a>
         </div>
         <div class="file-list" id="modal-file-list-allocation"></div>
         <div class="validation-result" id="modal-validation-allocation"></div>
 
         <!-- Old Mold Manual Match -->
-        <div style="font-size: 13px; font-weight: 600; margin: 16px 0 8px;">📋 旧模库存手工匹配结果 <span class="optional">（可选）</span></div>
+        <div style="font-size: 13px; font-weight: 600; margin: 16px 0 8px;">📋 Old Mold Manual Match <span class="optional">(optional)</span></div>
         <div class="upload-area" id="modal-upload-oldmatch" style="background:#f0f9ff; border-color:#bae6fd;" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event, 'modal-oldmatch')">
           <input type="file" id="modal-file-oldmatch" accept=".xlsx" onchange="handleFileSelect(event, 'modal-oldmatch')">
           <div class="upload-icon">📋</div>
-          <div class="upload-text">点击上传或拖拽 Excel 文件</div>
-          <div class="upload-hint">补充 Assets 未匹配的 Old Mold 库存</div>
+          <div class="upload-text">Click to upload or drag & drop Excel file</div>
+          <div class="upload-hint">Supplement Old Mold inventory not matched in Assets</div>
         </div>
         <div class="template-links">
-          <a href="#" class="template-link" onclick="alert('下载旧模库存手工匹配模板')">📄 下载模板</a>
-          <a href="#" class="template-link" onclick="alert('查看当前未匹配模具清单（29条）')">🔍 查看未匹配清单</a>
+          <a href="#" class="template-link" onclick="alert('Download Old Mold Manual Match template')">📄 Download Template</a>
+          <a href="#" class="template-link" onclick="alert('View current unmatched mold list (29 items)')">🔍 View Unmatched List</a>
         </div>
         <div class="file-list" id="modal-file-list-oldmatch"></div>
         <div class="validation-result" id="modal-validation-oldmatch"></div>
 
-        <!-- 基础数据源就绪状态 -->
+        <!-- Base Data Source Readiness -->
         <div style="margin-top: 20px; padding: 14px 16px; background: #f9fafb; border: 1px solid var(--border); border-radius: 8px;">
-          <div style="font-size: 13px; font-weight: 600; margin-bottom: 10px;">🔌 计算基础数据源就绪状态</div>
+          <div style="font-size: 13px; font-weight: 600; margin-bottom: 10px;">🔌 Base Data Source Readiness</div>
           <div style="display: flex; gap: 8px; flex-wrap: wrap; font-size: 12px;">
             <span class="tag tag-success">✅ Assets Master List</span>
             <span class="tag tag-success">✅ LineSheet (PLM)</span>
@@ -511,47 +511,47 @@
             <span class="tag tag-success">✅ Supplier Country</span>
           </div>
           <div class="form-hint" style="margin-top: 8px;">
-            以上数据由系统预置维护。如标记 ⚠️，建议先前往「基础数据源配置」页更新，再执行计算。
+            The above data is pre-configured by the system. If marked with ⚠️, please update it in the Data Source Configuration page before running the calculation.
           </div>
         </div>
 
         <div class="btn-group" style="justify-content: flex-end; margin-top: 24px;">
-          <button class="btn btn-outline" onclick="modalGoToStep(1)">← 上一步</button>
-          <button class="btn btn-primary" id="modal-btn-submit" disabled onclick="modalGoToStep(3)">下一步 →</button>
+          <button class="btn btn-outline" onclick="modalGoToStep(1)">← Back</button>
+          <button class="btn btn-primary" id="modal-btn-submit" disabled onclick="modalGoToStep(3)">Next →</button>
         </div>
       </div>
 
-      <!-- Step 3: 提交计算 -->
+      <!-- Step 3: Run Calculation -->
       <div id="modal-step3-panel" style="display:none;">
         <div id="modal-calculating" style="text-align:center; padding: 30px 0;">
           <div style="font-size: 40px; margin-bottom: 14px;">⏳</div>
-          <div style="font-size: 16px; font-weight: 600; margin-bottom: 6px;">计算中...</div>
-          <div style="font-size: 13px; color: var(--text-muted); margin-bottom: 18px;">正在执行模具产能分析，请稍候</div>
+          <div style="font-size: 16px; font-weight: 600; margin-bottom: 6px;">Calculating...</div>
+          <div style="font-size: 13px; color: var(--text-muted); margin-bottom: 18px;">Running mold capacity analysis, please wait</div>
           <div class="progress-bar" style="max-width: 420px; margin: 0 auto;">
             <div class="progress-bar-fill" id="modal-progress-fill"></div>
           </div>
-          <div style="font-size: 12px; color: var(--text-muted); margin-top: 10px;" id="modal-progress-text">初始化...</div>
+          <div style="font-size: 12px; color: var(--text-muted); margin-top: 10px;" id="modal-progress-text">Initializing...</div>
         </div>
 
         <div id="modal-task-result" style="display:none;">
           <div class="result-card">
-            <div class="rc-title">✅ <span id="modal-result-title">计算完成</span></div>
+            <div class="rc-title">✅ <span id="modal-result-title">Calculation Complete</span></div>
             <div class="result-kpis">
-              <div class="result-kpi"><div class="value">225</div><div class="label">总模具线数</div></div>
-              <div class="result-kpi"><div class="value" style="color:var(--warning);">41</div><div class="label">需加模线数</div></div>
-              <div class="result-kpi"><div class="value" style="color:var(--danger);">891</div><div class="label">总加模数量</div></div>
-              <div class="result-kpi"><div class="value" style="color:var(--success);">81.8%</div><div class="label">产能充足率</div></div>
+              <div class="result-kpi"><div class="value">225</div><div class="label">Total Mold Lines</div></div>
+              <div class="result-kpi"><div class="value" style="color:var(--warning);">41</div><div class="label">Need Additional</div></div>
+              <div class="result-kpi"><div class="value" style="color:var(--danger);">891</div><div class="label">Total Additional Qty</div></div>
+              <div class="result-kpi"><div class="value" style="color:var(--success);">81.8%</div><div class="label">Capacity Sufficiency</div></div>
             </div>
             <div class="result-risks">
-              <div class="risk-title">⚠️ 风险提示</div>
-              <div class="risk-item">🔴 3 条 Share Mold 线即使加 200 套模具仍无法满足交期</div>
-              <div class="risk-item">🟡 2 条 Old Mold 线触发 mold_not_ready</div>
-              <div class="risk-item">🔴 Top 缺口：HOKA-S27-011 需加模 228 套</div>
+              <div class="risk-title">⚠️ Risk Alerts</div>
+              <div class="risk-item">🔴 3 Share Mold lines still cannot meet delivery even with 200 additional molds</div>
+              <div class="risk-item">🟡 2 Old Mold lines trigger mold_not_ready</div>
+              <div class="risk-item">🔴 Top gap: HOKA-S27-011 needs 228 additional molds</div>
             </div>
             <div class="btn-group" style="justify-content: center;">
-              <button class="btn btn-primary" onclick="alert('跳转 Power BI')">📊 查看 Power BI</button>
-              <button class="btn btn-success" onclick="alert('下载分析结果 Excel')">📥 下载分析结果</button>
-              <button class="btn btn-outline" onclick="alert('下载旧模库存不匹配结果 Excel')">📥 下载旧模库存不匹配结果</button>
+              <button class="btn btn-primary" onclick="alert('Open Power BI')">📊 View Power BI</button>
+              <button class="btn btn-success" onclick="alert('Download analysis result Excel')">📥 Download Analysis Result</button>
+              <button class="btn btn-outline" onclick="alert('Download old mold mismatch Excel')">📥 Download Old Mold Mismatch</button>
             </div>
           </div>
         </div>
@@ -562,84 +562,83 @@
 </div>
 
 
-<!-- ==================== MODAL: 查看计算结果 ==================== -->
+<!-- ==================== MODAL: VIEW RESULT ==================== -->
 <div class="modal-overlay" id="modal-result">
   <div class="modal modal-large">
     <div class="modal-header">
-      <h3>📊 计算结果详情 — <span id="result-modal-title">S27F after May buy</span></h3>
+      <h3>📊 Calculation Result — <span id="result-modal-title">S27F after May buy</span></h3>
       <button class="modal-close" onclick="closeModal('modal-result')">&times;</button>
     </div>
     <div class="modal-body">
 
-      <!-- 加模分析结果 -->
-      <div style="font-size: 14px; font-weight: 600; margin-bottom: 12px;">📊 加模分析结果</div>
+      <!-- Additional Mold Analysis -->
+      <div style="font-size: 14px; font-weight: 600; margin-bottom: 12px;">📊 Additional Mold Analysis</div>
       <div class="result-kpis" id="result-kpis" style="grid-template-columns: repeat(4, 1fr);">
-        <div class="result-kpi"><div class="value" id="result-kpi-total">225</div><div class="label">总模具线数</div></div>
-        <div class="result-kpi"><div class="value" id="result-kpi-need" style="color:var(--warning);">41</div><div class="label">需加模线数</div></div>
-        <div class="result-kpi"><div class="value" id="result-kpi-qty" style="color:var(--danger);">891</div><div class="label">总加模数量</div></div>
-        <div class="result-kpi"><div class="value" id="result-kpi-rate" style="color:var(--success);">81.8%</div><div class="label">产能充足率</div></div>
+        <div class="result-kpi"><div class="value" id="result-kpi-total">225</div><div class="label">Total Mold Lines</div></div>
+        <div class="result-kpi"><div class="value" id="result-kpi-need" style="color:var(--warning);">41</div><div class="label">Need Additional</div></div>
+        <div class="result-kpi"><div class="value" id="result-kpi-qty" style="color:var(--danger);">891</div><div class="label">Total Additional Qty</div></div>
+        <div class="result-kpi"><div class="value" id="result-kpi-rate" style="color:var(--success);">81.8%</div><div class="label">Capacity Sufficiency</div></div>
       </div>
       <div class="result-risks" id="result-risks" style="margin: 12px 0;">
-        <!-- 动态填充 -->
+        <!-- dynamically filled -->
       </div>
 
-      <!-- 旧模库存匹配报告 -->
-      <div style="font-size: 14px; font-weight: 600; margin: 24px 0 12px;">📦 旧模库存匹配报告</div>
+      <!-- Old Mold Inventory Match Report -->
+      <div style="font-size: 14px; font-weight: 600; margin: 24px 0 12px;">📦 Old Mold Inventory Match Report</div>
       <div class="match-section">
-        <div class="ms-title">🔄 Mold Master → Assets Master List 匹配率</div>
+        <div class="ms-title">🔄 Mold Master → Assets Master List Match Rate</div>
         <div class="match-bar-container">
           <div class="match-bar-bg"><div class="match-bar-fill medium" id="result-match-bar" style="width:80%"></div></div>
           <div class="match-bar-text" id="result-match-text">80.0%</div>
         </div>
         <div style="display:flex; gap: 24px; margin-top: 10px; font-size: 13px;">
-          <div>✅ <strong>已匹配</strong> <span id="result-match-count">116</span> 条（Assets Master List）</div>
-          <div>📋 <strong>手工补充</strong> <span id="result-manual-count">12</span> 条（业务上传）</div>
-          <div>❌ <strong>未匹配</strong> <span id="result-unmatch-count">29</span> 条</div>
+          <div>✅ <strong>Matched</strong> <span id="result-match-count">116</span> (Assets Master List)</div>
+          <div>📋 <strong>Manual Supplement</strong> <span id="result-manual-count">12</span> (uploaded)</div>
+          <div>❌ <strong>Unmatched</strong> <span id="result-unmatch-count">29</span></div>
         </div>
         <div style="margin-top: 12px; padding-top: 12px; border-top: 1px dashed #fde68a; font-size: 12px; color: #92400e;" id="result-match-hint">
-          💡 <strong>提示：</strong>未匹配的 29 条 Old Mold 被默认设置为 existing_mold_qty = 1，可能导致加模需求被高估。
-          建议业务持续补充手工匹配结果，提高计算精度。
+          💡 <strong>Tip:</strong> The 29 unmatched Old Mold items are defaulted to existing_mold_qty = 1, which may overestimate additional mold demand. Please keep supplementing manual match results to improve accuracy.
         </div>
       </div>
 
-      <!-- 未匹配清单 -->
-      <div style="font-size: 14px; font-weight: 600; margin: 20px 0 10px;">❌ 未匹配模具清单（Top 10）</div>
+      <!-- Unmatched Mold List -->
+      <div style="font-size: 14px; font-weight: 600; margin: 20px 0 10px;">❌ Unmatched Mold List (Top 10)</div>
       <div class="preview-table-container">
         <table class="preview-table">
           <thead>
-            <tr><th>#</th><th>mold_code_short</th><th>component</th><th>material</th><th>supplier</th><th>建议行动</th></tr>
+            <tr><th>#</th><th>mold_code_short</th><th>component</th><th>material</th><th>supplier</th><th>Suggested Action</th></tr>
           </thead>
           <tbody id="result-unmatch-tbody">
-            <!-- 动态填充 -->
+            <!-- dynamically filled -->
           </tbody>
         </table>
       </div>
       <div style="margin-top: 10px;">
-        <button class="btn btn-outline btn-sm" onclick="alert('下载完整未匹配清单（' + (currentResultData ? currentResultData.unmatched : 29) + '条）')">📥 下载完整未匹配清单</button>
-        <button class="btn btn-primary btn-sm" onclick="closeModal('modal-result'); openTaskModal('edit', currentResultTaskId || 1);" style="margin-left: 8px;">⬆️ 上传手工匹配结果</button>
+        <button class="btn btn-outline btn-sm" onclick="alert('Download full unmatched list (' + (currentResultData ? currentResultData.unmatched : 29) + ' items)')">📥 Download Full Unmatched List</button>
+        <button class="btn btn-primary btn-sm" onclick="closeModal('modal-result'); openTaskModal('edit', currentResultTaskId || 1);" style="margin-left: 8px;">⬆️ Upload Manual Match Result</button>
       </div>
 
     </div>
     <div class="modal-footer">
-      <button class="btn btn-outline" onclick="closeModal('modal-result')">关闭</button>
-      <button class="btn btn-primary" onclick="alert('下载完整报告 PDF')">📥 下载完整报告</button>
+      <button class="btn btn-outline" onclick="closeModal('modal-result')">Close</button>
+      <button class="btn btn-primary" onclick="alert('Download full report PDF')">📥 Download Full Report</button>
     </div>
   </div>
 </div>
 
 
-<!-- ==================== MODAL: 数据源预览 ==================== -->
+<!-- ==================== MODAL: DATA PREVIEW ==================== -->
 <div class="modal-overlay" id="modal-preview">
   <div class="modal modal-large">
     <div class="modal-header">
-      <h3 id="preview-modal-title">📋 数据预览</h3>
+      <h3 id="preview-modal-title">📋 Data Preview</h3>
       <button class="modal-close" onclick="closeModal('modal-preview')">&times;</button>
     </div>
     <div class="modal-body">
       <div id="preview-content"></div>
     </div>
     <div class="modal-footer">
-      <button class="btn btn-outline" onclick="closeModal('modal-preview')">关闭</button>
+      <button class="btn btn-outline" onclick="closeModal('modal-preview')">Close</button>
     </div>
   </div>
 </div>
@@ -671,7 +670,7 @@
 
   function openTaskModal(mode, taskId) {
     currentEditTaskId = taskId || null;
-    const title = mode === 'new' ? '📝 新建计算任务' : '✏️ 编辑计算任务';
+    const title = mode === 'new' ? '📝 New Calculation Task' : '✏️ Edit Calculation Task';
     document.getElementById('modal-task-title').textContent = title;
 
     // Reset
@@ -691,9 +690,9 @@
     // If edit mode, prefill
     if (mode === 'edit' && taskId) {
       const presets = {
-        1: { season: 'S27F', round: 'after May buy', remark: '首次FC验证，含Bondi allocation场景' },
+        1: { season: 'S27F', round: 'after May buy', remark: 'First FC validation, includes Bondi allocation scenario' },
         2: { season: 'S27S', round: 'after April buy', remark: '' },
-        4: { season: 'S26F', round: 'after March buy', remark: '最终版，已归档' },
+        4: { season: 'S26F', round: 'after March buy', remark: 'Final version, archived' },
       };
       const p = presets[taskId];
       if (p) {
@@ -728,17 +727,17 @@
     const fill = document.getElementById('modal-progress-fill');
     const text = document.getElementById('modal-progress-text');
     const stages = [
-      { pct: 15, text: '读取 Mold Master Data...', delay: 400 },
-      { pct: 25, text: '读取 Forecast...', delay: 700 },
-      { pct: 35, text: '读取 Style-Factory Allocation...', delay: 900 },
-      { pct: 45, text: '数据清洗与标准化...', delay: 1200 },
-      { pct: 55, text: '关联 Assets Master List...', delay: 1500 },
-      { pct: 60, text: '旧模库存匹配（匹配率 80.0%）...', delay: 1800 },
-      { pct: 70, text: 'New Mold 场景计算中...', delay: 2100 },
-      { pct: 78, text: 'Old Mold 场景计算中...', delay: 2400 },
-      { pct: 86, text: 'Allocation 场景计算中...', delay: 2700 },
-      { pct: 95, text: '生成统一结果 & 匹配报告...', delay: 3000 },
-      { pct: 100, text: '计算完成', delay: 3300 },
+      { pct: 15, text: 'Reading Mold Master Data...', delay: 400 },
+      { pct: 25, text: 'Reading Forecast...', delay: 700 },
+      { pct: 35, text: 'Reading Style-Factory Allocation...', delay: 900 },
+      { pct: 45, text: 'Data cleaning & standardization...', delay: 1200 },
+      { pct: 55, text: 'Linking Assets Master List...', delay: 1500 },
+      { pct: 60, text: 'Old Mold inventory matching (match rate 80.0%)...', delay: 1800 },
+      { pct: 70, text: 'Calculating New Mold scenario...', delay: 2100 },
+      { pct: 78, text: 'Calculating Old Mold scenario...', delay: 2400 },
+      { pct: 86, text: 'Calculating Allocation scenario...', delay: 2700 },
+      { pct: 95, text: 'Generating unified result & match report...', delay: 3000 },
+      { pct: 100, text: 'Calculation complete', delay: 3300 },
     ];
     stages.forEach(s => {
       setTimeout(() => { fill.style.width = s.pct + '%'; text.textContent = s.text; }, s.delay);
@@ -747,7 +746,7 @@
       document.getElementById('modal-calculating').style.display = 'none';
       document.getElementById('modal-task-result').style.display = 'block';
       document.getElementById('modal-result-title').textContent =
-        document.getElementById('modal-season').value + ' ' + document.getElementById('modal-round').value + ' 计算完成';
+        document.getElementById('modal-season').value + ' ' + document.getElementById('modal-round').value + ' Calculation Complete';
     }, 3600);
   }
 
@@ -757,9 +756,9 @@
       title: 'S27F after May buy',
       kpis: { total: 225, need: 41, qty: 891, rate: '81.8%' },
       risks: [
-        '🔴 <strong>3 条 Share Mold 线</strong> 即使加 200 套模具仍无法满足交期（Bondi 场景）',
-        '🟡 <strong>2 条 Old Mold 线</strong> 触发 mold_not_ready（模具未就绪）',
-        '🔴 <strong>Top 缺口：</strong>HOKA-S27-011 需加模 228 套'
+        '🔴 <strong>3 Share Mold lines</strong> still cannot meet delivery even with 200 additional molds (Bondi scenario)',
+        '🟡 <strong>2 Old Mold lines</strong> trigger mold_not_ready (mold not ready)',
+        '🔴 <strong>Top gap:</strong> HOKA-S27-011 needs 228 additional molds'
       ],
       matchRate: 80.0,
       matched: 116,
@@ -782,9 +781,9 @@
       title: 'S27S after April buy',
       kpis: { total: 198, need: 35, qty: 720, rate: '82.3%' },
       risks: [
-        '🔴 <strong>2 条 Share Mold 线</strong> 即使加 150 套模具仍无法满足交期',
-        '🟡 <strong>1 条 Old Mold 线</strong> 触发 mold_not_ready（模具未就绪）',
-        '🟡 <strong>Top 缺口：</strong>UGG-S27-018 需加模 156 套'
+        '🔴 <strong>2 Share Mold lines</strong> still cannot meet delivery even with 150 additional molds',
+        '🟡 <strong>1 Old Mold line</strong> triggers mold_not_ready (mold not ready)',
+        '🟡 <strong>Top gap:</strong> UGG-S27-018 needs 156 additional molds'
       ],
       matchRate: 78.5,
       matched: 102,
@@ -807,9 +806,9 @@
       title: 'S26F after March buy',
       kpis: { total: 210, need: 38, qty: 650, rate: '85.1%' },
       risks: [
-        '🟡 <strong>1 条 Share Mold 线</strong> 即使加 100 套模具仍无法满足交期',
-        '🟢 <strong>Old Mold 线</strong> 全部就绪，无 mold_not_ready 风险',
-        '🟡 <strong>Top 缺口：</strong>HOKA-S26-009 需加模 98 套'
+        '🟡 <strong>1 Share Mold line</strong> still cannot meet delivery even with 100 additional molds',
+        '🟢 <strong>Old Mold lines</strong> are all ready, no mold_not_ready risk',
+        '🟡 <strong>Top gap:</strong> HOKA-S26-009 needs 98 additional molds'
       ],
       matchRate: 85.2,
       matched: 128,
@@ -837,7 +836,7 @@
     currentResultTaskId = taskId;
     const data = taskResults[taskId];
     if (!data) {
-      document.getElementById('result-modal-title').textContent = '计算结果';
+      document.getElementById('result-modal-title').textContent = 'Calculation Result';
       openModal('modal-result');
       return;
     }
@@ -852,7 +851,7 @@
 
     // Risks
     const risksEl = document.getElementById('result-risks');
-    risksEl.innerHTML = '<div class="risk-title">⚠️ 风险提示</div>' +
+    risksEl.innerHTML = '<div class="risk-title">⚠️ Risk Alerts</div>' +
       data.risks.map(r => '<div class="risk-item">' + r + '</div>').join('');
 
     // Match section
@@ -862,12 +861,12 @@
     document.getElementById('result-manual-count').textContent = data.manual;
     document.getElementById('result-unmatch-count').textContent = data.unmatched;
     document.getElementById('result-match-hint').innerHTML =
-      '💡 <strong>提示：</strong>未匹配的 ' + data.unmatched + ' 条 Old Mold 被默认设置为 existing_mold_qty = 1，可能导致加模需求被高估。建议业务持续补充手工匹配结果，提高计算精度。';
+      '💡 <strong>Tip:</strong> The ' + data.unmatched + ' unmatched Old Mold items are defaulted to existing_mold_qty = 1, which may overestimate additional mold demand. Please keep supplementing manual match results to improve accuracy.';
 
     // Unmatched list
     const tbody = document.getElementById('result-unmatch-tbody');
     tbody.innerHTML = data.unmatchedList.map((row, i) =>
-      '<tr><td>' + (i+1) + '</td><td>' + row[0] + '</td><td>' + row[1] + '</td><td>' + row[2] + '</td><td>' + row[3] + '</td><td>联系工厂确认库存</td></tr>'
+      '<tr><td>' + (i+1) + '</td><td>' + row[0] + '</td><td>' + row[1] + '</td><td>' + row[2] + '</td><td>' + row[3] + '</td><td>Contact factory to confirm inventory</td></tr>'
     ).join('');
 
     openModal('modal-result');
@@ -889,7 +888,7 @@
       master: { icon: '📊', name: 'Mold Master Data' },
       forecast: { icon: '📈', name: 'Forecast' },
       allocation: { icon: '🔗', name: 'Style-Factory Allocation' },
-      oldmatch: { icon: '📋', name: '旧模库存手工匹配结果' },
+      oldmatch: { icon: '📋', name: 'Old Mold Manual Match' },
     };
     const label = labels[shortType];
 
@@ -900,14 +899,14 @@
           <div class="file-name">${label.name} — ${file.name}</div>
           <div class="file-meta">${sizeKB} KB</div>
         </div>
-        <span class="file-status pending" id="file-status-${shortType}">待校验</span>
+        <span class="file-status pending" id="file-status-${shortType}">Pending validation</span>
       </div>
     `;
 
     setTimeout(() => {
       const statusEl = document.getElementById('file-status-' + shortType);
       statusEl.className = 'file-status validating';
-      statusEl.textContent = '校验中...';
+      statusEl.textContent = 'Validating...';
     }, 300);
 
     setTimeout(() => {
@@ -916,14 +915,14 @@
 
       if (isOptional) {
         statusEl.className = 'file-status optional';
-        statusEl.textContent = '已上传';
+        statusEl.textContent = 'Uploaded';
         validationEl.className = 'validation-result show pass';
-        validationEl.innerHTML = '<div class="vr-title" style="color:var(--info);">📋 可选文件已接收</div><div class="vr-detail">将在计算时与 Assets Master List 合并使用。</div>';
+        validationEl.innerHTML = '<div class="vr-title" style="color:var(--info);">📋 Optional file received</div><div class="vr-detail">Will be merged with Assets Master List during calculation.</div>';
       } else {
         statusEl.className = 'file-status pass';
-        statusEl.textContent = '校验通过';
+        statusEl.textContent = 'Validation passed';
         validationEl.className = 'validation-result show pass';
-        validationEl.innerHTML = '<div class="vr-title" style="color:var(--success);">✅ 数据校验通过</div><div class="vr-detail">格式正确，可以进入下一步。</div>';
+        validationEl.innerHTML = '<div class="vr-title" style="color:var(--success);">✅ Data validation passed</div><div class="vr-detail">Format is correct, you may proceed.</div>';
         modalValidations[type] = true;
       }
       checkModalSubmitReady();
@@ -938,7 +937,7 @@
   // ===== Data Source Preview =====
   const previewData = {
     leadtime: {
-      title: '🚚 Transportation Leadtime 预览',
+      title: '🚚 Transportation Leadtime Preview',
       headers: ['supplier_country', 'factory_country', 'Transportation lead-time', 'transfer_lead_time'],
       rows: [
         ['China', 'Cambodia', '10-12 days', '12'],
@@ -953,7 +952,7 @@
       ]
     },
     linesheet: {
-      title: '📄 LineSheet 预览',
+      title: '📄 LineSheet Preview',
       headers: ['Season Name', 'Style Name', 'Division', 'Factory', 'Midsole', 'Outsole', 'Size Run'],
       rows: [
         ['Hoka Footwear Spring 2027', 'ORA Recovery Flip', "Men's", 'DS-VNFI', 'HOKA-S19-013', 'HOKA-S19-014', 'M 7-14 Whole'],
@@ -964,7 +963,7 @@
       ]
     },
     assets: {
-      title: '🏭 Assets Master List 预览',
+      title: '🏭 Assets Master List Preview',
       headers: ['Brand', 'Mold Code', 'Component', 'Material', 'Bottom Supplier', 'Mold Type', 'Mold Pairs'],
       rows: [
         ['HOKA', '11920-1', 'Sockliner', 'CM SCF ATPU', 'FX-NVNFX', 'Production Mold', '24'],
@@ -975,7 +974,7 @@
       ]
     },
     supplier: {
-      title: '🌍 Supplier Country 预览',
+      title: '🌍 Supplier Country Preview',
       headers: ['supplier', 'supplier_country'],
       rows: [
         ['BNH-NVNBNH', 'North Vietnam'],
@@ -1002,14 +1001,14 @@
 
     if (isEditable) {
       html += '<div style="margin-bottom: 10px; display:flex; gap: 8px;">';
-      html += '<button class="btn btn-primary btn-sm" onclick="addLeadtimeRow()">+ 新增行</button>';
-      html += '<span class="form-hint" style="display:flex;align-items:center;">可直接点击表格单元格修改数据，修改后点击「保存」生效</span>';
+      html += '<button class="btn btn-primary btn-sm" onclick="addLeadtimeRow()">+ Add Row</button>';
+      html += '<span class="form-hint" style="display:flex;align-items:center;">Click any table cell to edit, then click Save to apply</span>';
       html += '</div>';
     }
 
     html += '<div class="preview-table-container"><table class="preview-table" id="preview-table"><thead><tr>';
     data.headers.forEach(h => { html += '<th>' + h + '</th>'; });
-    if (isEditable) html += '<th>操作</th>';
+    if (isEditable) html += '<th>Action</th>';
     html += '</tr></thead><tbody>';
     data.rows.forEach((row, rowIdx) => {
       html += '<tr data-row-idx="' + rowIdx + '">';
@@ -1021,7 +1020,7 @@
         }
       });
       if (isEditable) {
-        html += '<td><button class="action-link" onclick="deleteLeadtimeRow(' + rowIdx + ')" style="color:var(--danger);">删除</button></td>';
+        html += '<td><button class="action-link" onclick="deleteLeadtimeRow(' + rowIdx + ')" style="color:var(--danger);">Delete</button></td>';
       }
       html += '</tr>';
     });
@@ -1037,7 +1036,7 @@
         saveBtn = document.createElement('button');
         saveBtn.id = 'preview-save-btn';
         saveBtn.className = 'btn btn-success';
-        saveBtn.innerHTML = '💾 保存修改';
+        saveBtn.innerHTML = '💾 Save Changes';
         saveBtn.onclick = saveLeadtimeChanges;
         footer.insertBefore(saveBtn, footer.firstChild);
       }
@@ -1060,7 +1059,7 @@
       '<td><input type="text" value="" data-row="' + rowIdx + '" data-col="1" style="width:100%;border:none;background:transparent;font-size:12px;padding:4px 2px;font-family:inherit;" onfocus="this.style.background=\'#e0f2fe\'" onblur="this.style.background=\'transparent\'"></td>' +
       '<td><input type="text" value="" data-row="' + rowIdx + '" data-col="2" style="width:100%;border:none;background:transparent;font-size:12px;padding:4px 2px;font-family:inherit;" onfocus="this.style.background=\'#e0f2fe\'" onblur="this.style.background=\'transparent\'"></td>' +
       '<td><input type="text" value="" data-row="' + rowIdx + '" data-col="3" style="width:100%;border:none;background:transparent;font-size:12px;padding:4px 2px;font-family:inherit;" onfocus="this.style.background=\'#e0f2fe\'" onblur="this.style.background=\'transparent\'"></td>' +
-      '<td><button class="action-link" onclick="deleteLeadtimeRow(' + rowIdx + ')" style="color:var(--danger);">删除</button></td>';
+      '<td><button class="action-link" onclick="deleteLeadtimeRow(' + rowIdx + ')" style="color:var(--danger);">Delete</button></td>';
     tbody.appendChild(tr);
   }
 
@@ -1084,7 +1083,7 @@
       newRows.push(rowMap[k]);
     });
     previewData.leadtime.rows = newRows;
-    alert('✅ Transportation Leadtime 修改已保存（' + newRows.length + ' 条记录）');
+    alert('✅ Transportation Leadtime changes saved (' + newRows.length + ' records)');
     closeModal('modal-preview');
   }
 </script>

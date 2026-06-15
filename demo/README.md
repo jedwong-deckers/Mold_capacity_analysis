@@ -1,41 +1,41 @@
 # Mold Capacity Analysis — Phase 1 Demo
 
-## 快速查看前端 Demo
+## Quick Start — Frontend Demo
 
-直接用浏览器打开以下文件即可，无需任何环境配置：
+Open the following file directly in a browser. No environment setup is required:
 
 ```
-demo/frontend/html-v2.html   ← 最新版 Demo（v2.0）
-demo/frontend/index.html     ← 旧版 Demo（v1.0）
+demo/frontend/html-v2.html   ← Latest Demo (v2.0)
+demo/frontend/index.html     ← Legacy Demo (v1.0)
 ```
 
-**推荐查看 `html-v2.html`**，包含：
-- 计算任务清单（新建 / 编辑 / 查看结果）
-- 基础数据源配置（含 Transportation Leadtime 可编辑维护）
-- 三步计算任务配置向导
-- 动态计算结果展示
+**Recommended: `html-v2.html`**, which includes:
+- Task list (create / edit / view results)
+- Data source configuration (with editable Transportation Leadtime)
+- 3-step task configuration wizard
+- Dynamic calculation result display
 
-## Python Demo（可选）
+## Python Demo (Optional)
 
-如需本地运行 Python 计算管线：
+To run the Python calculation pipeline locally:
 
 ```bash
 cd demo
 python phase1_demo.py
 ```
 
-依赖：`pandas`, `openpyxl`
+Dependencies: `pandas`, `openpyxl`
 
-## 文件说明
+## File Overview
 
-| 文件 | 说明 |
-|------|------|
-| `frontend/html-v2.html` | Phase 1 MVP 前端 Demo |
-| `frontend/index.html` | 初版前端 Demo |
-| `frontend/修改记录.md` | 迭代修改记录 |
-| `phase1_demo.py` | CLI 计算管线入口 |
-| `engine.py` | 结果合并引擎 |
-| `validator.py` | 数据校验模块 |
-| `reporter.py` | 报告生成器 |
-| `config.py` | 配置常量 |
-| `output/` | Demo 运行示例输出 |
+| File | Description |
+|------|-------------|
+| `frontend/html-v2.html` | Phase 1 MVP frontend demo |
+| `frontend/index.html` | Initial frontend demo |
+| `frontend/修改记录.md` | Change log (kept in Chinese for context) |
+| `phase1_demo.py` | CLI pipeline entry point |
+| `engine.py` | Result merge engine |
+| `validator.py` | Data validation module |
+| `reporter.py` | Report generator |
+| `config.py` | Configuration constants |
+| `output/` | Sample demo outputs |
