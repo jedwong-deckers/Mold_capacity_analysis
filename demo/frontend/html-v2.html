@@ -598,10 +598,12 @@
       </div>
 
       <!-- 4.2 Data Source Issue -->
-      <div class="result-risks">
-        <div class="risk-title">⚠️ Data Source Issue</div>
-        <div class="risk-item">❌ <span id="data-source-unmatch">80</span> unmatched molds caused by data source mapping gaps.</div>
-        <div style="margin-top: 10px;">
+      <div class="match-section">
+        <div class="ms-title">⚠️ Data Source Issue</div>
+        <div style="font-size: 13px; color: var(--text-muted); padding: 3px 0;">
+          ❌ <span id="data-source-unmatch">80</span> unmatched molds caused by data source mapping gaps.
+        </div>
+        <div style="margin-top: 12px;">
           <button class="btn btn-outline btn-sm" onclick="alert('Download detailed unmatched list (' + (currentResultData ? currentResultData.dataSourceIssue : 80) + ' items)')">📥 Download Detailed Unmatched List</button>
         </div>
       </div>
