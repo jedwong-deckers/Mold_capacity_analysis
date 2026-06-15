@@ -254,7 +254,7 @@
         </thead>
         <tbody id="task-list-body">
           <tr data-task-id="1">
-            <td><strong>S27F</strong></td>
+            <td><strong>Fall 2027</strong></td>
             <td>after May buy</td>
             <td style="max-width:150px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" title="First FC validation, includes Bondi allocation scenario">First FC validation, includes Bondi allocation scenario</td>
             <td>157</td>
@@ -269,7 +269,7 @@
             </td>
           </tr>
           <tr data-task-id="2">
-            <td><strong>S27S</strong></td>
+            <td><strong>Spring 2027</strong></td>
             <td>after April buy</td>
             <td style="max-width:150px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" title="-">-</td>
             <td>144</td>
@@ -284,7 +284,7 @@
             </td>
           </tr>
           <tr data-task-id="3">
-            <td><strong>S27F</strong></td>
+            <td><strong>Fall 2027</strong></td>
             <td>after May buy</td>
             <td style="max-width:150px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" title="Re-run after FC update">Re-run after FC update</td>
             <td>—</td>
@@ -299,7 +299,7 @@
             </td>
           </tr>
           <tr data-task-id="4">
-            <td><strong>S26F</strong></td>
+            <td><strong>Fall 2026</strong></td>
             <td>after March buy</td>
             <td style="max-width:150px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" title="Final version, archived">Final version, archived</td>
             <td>165</td>
@@ -406,9 +406,9 @@
             <label>Season <span class="required">*</span></label>
             <select id="modal-season">
               <option value="">Select</option>
-              <option value="S27F" selected>S27F</option>
-              <option value="S27S">S27S</option>
-              <option value="S28F">S28F</option>
+              <option value="Fall 2027" selected>Fall 2027</option>
+              <option value="Spring 2027">Spring 2027</option>
+              <option value="Fall 2028">Fall 2028</option>
             </select>
           </div>
           <div class="form-group">
@@ -561,7 +561,7 @@
 <div class="modal-overlay" id="modal-result">
   <div class="modal modal-large">
     <div class="modal-header">
-      <h3>📊 Calculation Result — <span id="result-modal-title">S27F after May buy</span></h3>
+      <h3>📊 Calculation Result — <span id="result-modal-title">Fall 2027 after May buy</span></h3>
       <button class="modal-close" onclick="closeModal('modal-result')">&times;</button>
     </div>
     <div class="modal-body">
@@ -685,9 +685,9 @@
     // If edit mode, prefill
     if (mode === 'edit' && taskId) {
       const presets = {
-        1: { season: 'S27F', round: 'after May buy', remark: 'First FC validation, includes Bondi allocation scenario' },
-        2: { season: 'S27S', round: 'after April buy', remark: '' },
-        4: { season: 'S26F', round: 'after March buy', remark: 'Final version, archived' },
+        1: { season: 'Fall 2027', round: 'after May buy', remark: 'First FC validation, includes Bondi allocation scenario' },
+        2: { season: 'Spring 2027', round: 'after April buy', remark: '' },
+        4: { season: 'Fall 2026', round: 'after March buy', remark: 'Final version, archived' },
       };
       const p = presets[taskId];
       if (p) {
@@ -748,7 +748,7 @@
   // ===== Task Result Data =====
   const taskResults = {
     1: {
-      title: 'S27F after May buy',
+      title: 'Fall 2027 after May buy',
       kpis: { total: 225, need: 41, qty: 891, rate: '81.8%' },
       risks: [
         '🔴 <strong>3 Share Mold lines</strong> still cannot meet delivery even with 200 additional molds (Bondi scenario)',
@@ -773,7 +773,7 @@
       ]
     },
     2: {
-      title: 'S27S after April buy',
+      title: 'Spring 2027 after April buy',
       kpis: { total: 198, need: 35, qty: 720, rate: '82.3%' },
       risks: [
         '🔴 <strong>2 Share Mold lines</strong> still cannot meet delivery even with 150 additional molds',
@@ -798,7 +798,7 @@
       ]
     },
     4: {
-      title: 'S26F after March buy',
+      title: 'Fall 2026 after March buy',
       kpis: { total: 210, need: 38, qty: 650, rate: '85.1%' },
       risks: [
         '🟡 <strong>1 Share Mold line</strong> still cannot meet delivery even with 100 additional molds',
