@@ -551,22 +551,38 @@
     </div>
     <div class="modal-body">
 
-      <!-- Additional Mold Analysis -->
-      <div style="font-size: 14px; font-weight: 600; margin-bottom: 12px;">📊 Additional Mold Analysis</div>
-      <div class="result-kpis" id="result-kpis" style="grid-template-columns: repeat(4, 1fr);">
-        <div class="result-kpi"><div class="value" id="result-kpi-total">225</div><div class="label">Total Mold Lines</div></div>
-        <div class="result-kpi"><div class="value" id="result-kpi-need" style="color:var(--warning);">41</div><div class="label">Need Additional</div></div>
-        <div class="result-kpi"><div class="value" id="result-kpi-qty" style="color:var(--danger);">891</div><div class="label">Total Additional Qty</div></div>
-        <div class="result-kpi"><div class="value" id="result-kpi-rate" style="color:var(--success);">81.8%</div><div class="label">Capacity Sufficiency</div></div>
-      </div>
-      <div class="result-risks" id="result-risks" style="margin: 12px 0;">
-        <!-- dynamically filled -->
+      <!-- Section 1: Mold Match Status -->
+      <div style="font-size: 14px; font-weight: 600; margin-bottom: 12px;">1. Mold Match Status</div>
+      <div class="result-kpis" id="result-match-status" style="grid-template-columns: repeat(3, 1fr);">
+        <div class="result-kpi"><div class="value" id="match-total">520</div><div class="label">Total Molds</div></div>
+        <div class="result-kpi"><div class="value" id="match-matched">329</div><div class="label">Matched Molds</div></div>
+        <div class="result-kpi"><div class="value" id="match-rate">63.3%</div><div class="label">Match Rate</div></div>
       </div>
 
-      <!-- Old Mold Inventory Match Report -->
-      <div style="font-size: 14px; font-weight: 600; margin: 24px 0 12px;">📦 Old Mold Inventory Match Report</div>
-      <div class="match-section">
-        <div class="ms-title">🔄 Mold Master → Assets Master List Match Rate</div>
+      <!-- Section 2: Risk Without Additional Mold -->
+      <div style="font-size: 14px; font-weight: 600; margin: 24px 0 12px;">2. Risk Without Additional Mold</div>
+      <div class="result-kpis" id="result-risk" style="grid-template-columns: repeat(3, 1fr);">
+        <div class="result-kpi"><div class="value" id="risk-delay-pairs">654M</div><div class="label">Total Delay Pairs</div></div>
+        <div class="result-kpi"><div class="value" id="risk-delay-rate">17.6%</div><div class="label">Total Delay Rate</div></div>
+        <div class="result-kpi"><div class="value" id="risk-max-delay">4640</div><div class="label">Max Delay Day</div></div>
+      </div>
+      <div class="form-hint" style="margin: 4px 0 16px;">Total delay pairs / total pairs</div>
+
+      <!-- Section 3: Additional Mold Result -->
+      <div style="font-size: 14px; font-weight: 600; margin: 24px 0 12px;">3. Additional Mold Result</div>
+      <div class="result-kpis" id="result-additional" style="grid-template-columns: repeat(4, 1fr);">
+        <div class="result-kpi"><div class="value" id="add-matched">329</div><div class="label">Total Matched Molds</div></div>
+        <div class="result-kpi"><div class="value" id="add-constraint" style="color:var(--warning);">52</div><div class="label">Molds Constraint</div></div>
+        <div class="result-kpi"><div class="value" id="add-constraint-rate" style="color:var(--danger);">15.8%</div><div class="label">Mold Constraint Rate</div></div>
+        <div class="result-kpi"><div class="value" id="add-total-qty" style="color:var(--success);">846</div><div class="label">Total Additional Mold Qty</div></div>
+      </div>
+
+      <!-- Section 4: Unmatched Result -->
+      <div style="font-size: 14px; font-weight: 600; margin: 24px 0 12px;">4. Unmatched Result</div>
+
+      <!-- 4.1 Old Mold Inventory Matched Report -->
+      <div class="match-section" style="margin-bottom: 16px;">
+        <div class="ms-title">🔄 Old Mold Inventory Matched Report</div>
         <div class="match-bar-container">
           <div class="match-bar-bg"><div class="match-bar-fill medium" id="result-match-bar" style="width:80%"></div></div>
           <div class="match-bar-text" id="result-match-text">80.0%</div>
@@ -576,26 +592,18 @@
           <div>📋 <strong>Manual Supplement</strong> <span id="result-manual-count">12</span> (uploaded)</div>
           <div>❌ <strong>Unmatched</strong> <span id="result-unmatch-count">29</span></div>
         </div>
-        <div style="margin-top: 12px; padding-top: 12px; border-top: 1px dashed #fde68a; font-size: 12px; color: #92400e;" id="result-match-hint">
-          💡 <strong>Tip:</strong> The 29 unmatched Old Mold items are defaulted to existing_mold_qty = 1, which may overestimate additional mold demand. Please keep supplementing manual match results to improve accuracy.
+        <div style="margin-top: 12px;">
+          <button class="btn btn-outline btn-sm" onclick="alert('Download full mapping list (' + (currentResultData ? currentResultData.oldMoldMatch.unmatched : 29) + ' items)')">📥 Download Full Mapping List</button>
         </div>
       </div>
 
-      <!-- Unmatched Mold List -->
-      <div style="font-size: 14px; font-weight: 600; margin: 20px 0 10px;">❌ Unmatched Mold List (Top 10)</div>
-      <div class="preview-table-container">
-        <table class="preview-table">
-          <thead>
-            <tr><th>#</th><th>mold_code_short</th><th>component</th><th>material</th><th>supplier</th><th>Suggested Action</th></tr>
-          </thead>
-          <tbody id="result-unmatch-tbody">
-            <!-- dynamically filled -->
-          </tbody>
-        </table>
-      </div>
-      <div style="margin-top: 10px;">
-        <button class="btn btn-outline btn-sm" onclick="alert('Download full unmatched list (' + (currentResultData ? currentResultData.unmatched : 29) + ' items)')">📥 Download Full Unmatched List</button>
-        <button class="btn btn-primary btn-sm" onclick="closeModal('modal-result'); openTaskModal('edit', currentResultTaskId || 1);" style="margin-left: 8px;">⬆️ Upload Manual Match Result</button>
+      <!-- 4.2 Data Source Issue -->
+      <div class="result-risks">
+        <div class="risk-title">⚠️ Data Source Issue</div>
+        <div class="risk-item">❌ <span id="data-source-unmatch">80</span> unmatched molds caused by data source mapping gaps.</div>
+        <div style="margin-top: 10px;">
+          <button class="btn btn-outline btn-sm" onclick="alert('Download detailed unmatched list (' + (currentResultData ? currentResultData.dataSourceIssue : 80) + ' items)')">📥 Download Detailed Unmatched List</button>
+        </div>
       </div>
 
     </div>
@@ -725,78 +733,27 @@
   const taskResults = {
     1: {
       title: 'Fall 2027 after May buy',
-      kpis: { total: 225, need: 41, qty: 891, rate: '81.8%' },
-      risks: [
-        '🔴 <strong>3 Share Mold lines</strong> still cannot meet delivery even with 200 additional molds (Bondi scenario)',
-        '🟡 <strong>2 Old Mold lines</strong> trigger mold_not_ready (mold not ready)',
-        '🔴 <strong>Top gap:</strong> HOKA-S27-011 needs 228 additional molds'
-      ],
-      matchRate: 80.0,
-      matched: 116,
-      manual: 12,
-      unmatched: 29,
-      unmatchedList: [
-        ['HOKA-F17-006','Midsole','CM LWE 48C - 0.15 - 195%','WN-SVNWN'],
-        ['HOKA-F18-001','Midsole','CM Infuse 48C - 0.17 - 190%','HF-NVNAS'],
-        ['HOKA-F18-005','Midsole','Vacuum Infuse 48C','HF-NVNAS'],
-        ['HOKA-F22-005','Outsole','CM Durabrasion','VB-SCNVB'],
-        ['HOKA-F23-001','Midsole','IM DTL 48C','GS-SCNSX'],
-        ['HOKA-F23-014','Outsole','CM Megagrip','BNH-NVNBNH'],
-        ['HOKA-F25-002','Midsole','BPU 90C','SH-SCNCCC'],
-        ['HOKA-F25-004','Heel','IM High Elastic','LT-NVNVH'],
-        ['HOKA-F25-005','Midsole','SCF TPEE','PX-SVNPX'],
-        ['HOKA-F25-006','Outsole','CM LWEVA','YZ-SVNHB'],
-      ]
+      moldMatch: { total: 520, matched: 329, rate: '63.3%' },
+      risk: { delayPairs: '654M', delayRate: '17.6%', maxDelay: 4640 },
+      additional: { matched: 329, constraint: 52, constraintRate: '15.8%', totalQty: 846 },
+      oldMoldMatch: { rate: 80.0, matched: 116, manual: 12, unmatched: 29 },
+      dataSourceIssue: 80
     },
     2: {
       title: 'Spring 2027 after April buy',
-      kpis: { total: 198, need: 35, qty: 720, rate: '82.3%' },
-      risks: [
-        '🔴 <strong>2 Share Mold lines</strong> still cannot meet delivery even with 150 additional molds',
-        '🟡 <strong>1 Old Mold line</strong> triggers mold_not_ready (mold not ready)',
-        '🟡 <strong>Top gap:</strong> UGG-S27-018 needs 156 additional molds'
-      ],
-      matchRate: 78.5,
-      matched: 102,
-      manual: 8,
-      unmatched: 34,
-      unmatchedList: [
-        ['UGG-F18-002','Outsole','ColdMold Regular EVA','SF-NVNSF'],
-        ['UGG-F19-001','Midsole','IM DTL 48C','DG-SCNDG'],
-        ['UGG-F20-003','Heel','ABS High heel','HJF-NVNHG'],
-        ['TEVA-F21-001','Outsole','CM Durabrasion','VB-SCNVB'],
-        ['HOKA-F22-001','Midsole','CM LWE 48C','WN-SVNWN'],
-        ['HOKA-F22-008','Outsole','CM Megagrip','BNH-NVNBNH'],
-        ['UGG-F24-001','Midsole','BPU 90C','SH-SCNCCC'],
-        ['TEVA-F25-002','Heel','IM High Elastic','LT-NVNVH'],
-        ['UGG-F26-001','Midsole','SCF TPEE','PX-SVNPX'],
-        ['HOKA-F26-003','Outsole','CM LWEVA','YZ-SVNHB'],
-      ]
+      moldMatch: { total: 480, matched: 302, rate: '62.9%' },
+      risk: { delayPairs: '580M', delayRate: '16.2%', maxDelay: 4210 },
+      additional: { matched: 302, constraint: 48, constraintRate: '15.9%', totalQty: 780 },
+      oldMoldMatch: { rate: 78.5, matched: 102, manual: 8, unmatched: 34 },
+      dataSourceIssue: 65
     },
     4: {
       title: 'Fall 2026 after March buy',
-      kpis: { total: 210, need: 38, qty: 650, rate: '85.1%' },
-      risks: [
-        '🟡 <strong>1 Share Mold line</strong> still cannot meet delivery even with 100 additional molds',
-        '🟢 <strong>Old Mold lines</strong> are all ready, no mold_not_ready risk',
-        '🟡 <strong>Top gap:</strong> HOKA-S26-009 needs 98 additional molds'
-      ],
-      matchRate: 85.2,
-      matched: 128,
-      manual: 15,
-      unmatched: 22,
-      unmatchedList: [
-        ['HOKA-F15-001','Midsole','CM LWE 48C - 0.15 - 195%','WN-SVNWN'],
-        ['HOKA-F16-002','Outsole','CM Durabrasion','VB-SCNVB'],
-        ['UGG-F17-001','Midsole','IM DTL 48C','GS-SCNSX'],
-        ['TEVA-F18-001','Heel','ABS High heel','HJF-NVNHG'],
-        ['HOKA-F19-003','Outsole','CM Megagrip','BNH-NVNBNH'],
-        ['UGG-F20-001','Midsole','BPU 90C','SH-SCNCCC'],
-        ['TEVA-F21-002','Midsole','SCF TPEE','PX-SVNPX'],
-        ['HOKA-F22-002','Outsole','CM LWEVA','YZ-SVNHB'],
-        ['UGG-F23-001','Midsole','IM High Elastic','LT-NVNVH'],
-        ['TEVA-F24-001','Outsole','CM Infuse 48C','HF-NVNAS'],
-      ]
+      moldMatch: { total: 510, matched: 380, rate: '74.5%' },
+      risk: { delayPairs: '420M', delayRate: '12.8%', maxDelay: 3150 },
+      additional: { matched: 380, constraint: 38, constraintRate: '10.0%', totalQty: 650 },
+      oldMoldMatch: { rate: 85.2, matched: 128, manual: 15, unmatched: 22 },
+      dataSourceIssue: 45
     }
   };
   let currentResultData = null;
@@ -814,31 +771,31 @@
     currentResultData = data;
     document.getElementById('result-modal-title').textContent = data.title;
 
-    // KPIs
-    document.getElementById('result-kpi-total').textContent = data.kpis.total;
-    document.getElementById('result-kpi-need').textContent = data.kpis.need;
-    document.getElementById('result-kpi-qty').textContent = data.kpis.qty;
-    document.getElementById('result-kpi-rate').textContent = data.kpis.rate;
+    // Section 1: Mold Match Status
+    document.getElementById('match-total').textContent = data.moldMatch.total;
+    document.getElementById('match-matched').textContent = data.moldMatch.matched;
+    document.getElementById('match-rate').textContent = data.moldMatch.rate;
 
-    // Risks
-    const risksEl = document.getElementById('result-risks');
-    risksEl.innerHTML = '<div class="risk-title">⚠️ Risk Alerts</div>' +
-      data.risks.map(r => '<div class="risk-item">' + r + '</div>').join('');
+    // Section 2: Risk Without Additional Mold
+    document.getElementById('risk-delay-pairs').textContent = data.risk.delayPairs;
+    document.getElementById('risk-delay-rate').textContent = data.risk.delayRate;
+    document.getElementById('risk-max-delay').textContent = data.risk.maxDelay;
 
-    // Match section
-    document.getElementById('result-match-bar').style.width = data.matchRate + '%';
-    document.getElementById('result-match-text').textContent = data.matchRate.toFixed(1) + '%';
-    document.getElementById('result-match-count').textContent = data.matched;
-    document.getElementById('result-manual-count').textContent = data.manual;
-    document.getElementById('result-unmatch-count').textContent = data.unmatched;
-    document.getElementById('result-match-hint').innerHTML =
-      '💡 <strong>Tip:</strong> The ' + data.unmatched + ' unmatched Old Mold items are defaulted to existing_mold_qty = 1, which may overestimate additional mold demand. Please keep supplementing manual match results to improve accuracy.';
+    // Section 3: Additional Mold Result
+    document.getElementById('add-matched').textContent = data.additional.matched;
+    document.getElementById('add-constraint').textContent = data.additional.constraint;
+    document.getElementById('add-constraint-rate').textContent = data.additional.constraintRate;
+    document.getElementById('add-total-qty').textContent = data.additional.totalQty;
 
-    // Unmatched list
-    const tbody = document.getElementById('result-unmatch-tbody');
-    tbody.innerHTML = data.unmatchedList.map((row, i) =>
-      '<tr><td>' + (i+1) + '</td><td>' + row[0] + '</td><td>' + row[1] + '</td><td>' + row[2] + '</td><td>' + row[3] + '</td><td>Contact factory to confirm inventory</td></tr>'
-    ).join('');
+    // Section 4.1: Old Mold Inventory Matched Report
+    document.getElementById('result-match-bar').style.width = data.oldMoldMatch.rate + '%';
+    document.getElementById('result-match-text').textContent = data.oldMoldMatch.rate.toFixed(1) + '%';
+    document.getElementById('result-match-count').textContent = data.oldMoldMatch.matched;
+    document.getElementById('result-manual-count').textContent = data.oldMoldMatch.manual;
+    document.getElementById('result-unmatch-count').textContent = data.oldMoldMatch.unmatched;
+
+    // Section 4.2: Data Source Issue
+    document.getElementById('data-source-unmatch').textContent = data.dataSourceIssue;
 
     openModal('modal-result');
   }
